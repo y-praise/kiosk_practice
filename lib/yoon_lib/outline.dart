@@ -231,6 +231,7 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text('무인민원발급창구'),),
       backgroundColor: const Color.fromARGB(255, 182, 232, 255),
       body: Column(
         children: [
