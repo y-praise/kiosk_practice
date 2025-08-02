@@ -454,6 +454,7 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
                                           ),
                                         ],
                                       ),
+                                      Spacer(),
                                       Column(
                                         children: [
                                           Container(
@@ -461,11 +462,12 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
                                             margin: EdgeInsets.all(5),
                                             padding: EdgeInsets.all(3),
                                             child: Text(
-                                              '동전 넣는 곳',
+                                              '동전 \n넣는 곳',
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 10,
                                               ),
+                                              textAlign: TextAlign.center,
                                             ),
                                           ),
                                           Container(
@@ -534,6 +536,7 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
                                           ),
                                         ],
                                       ),
+                                      Spacer(),
                                       Column(
                                         children: [
                                           Container(
