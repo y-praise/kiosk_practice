@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '/jung_lib/main.dart';
 import 'firstpage.dart';
-import 'yoon_lib/outline.dart';
-import 'hong_lib/first_screen.dart';
-import 'jang_lib/screens/home.dart';
+import 'food_lib/main.dart';
+import 'civil_service_lib/outline.dart';
+import 'airport_lib/main.dart';
+import 'table_lib/main.dart';
 
 void main() {
   runApp(const MainApp());
@@ -19,10 +19,10 @@ class MainApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => Firstpage(),
-        '/yoon': (context) => CivilServiceMachine(),
-        '/jung': (context) => MyApp(),
-        '/hong': (context) => Mainscreen(),
-        '/jang': (context)  => HomeScreen()
+        '/civil_service': (context) => CivilServiceMachine(),
+        '/food': (context) => FoodMain(),
+        '/airport': (context) => AirportMain(),
+        '/table': (context)  => TableMain()
       },
     );
   }
