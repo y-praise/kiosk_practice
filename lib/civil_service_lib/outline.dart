@@ -587,6 +587,21 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
                                     ],
                                   ),
                                 ),
+                                ElevatedButton(
+                                  child: Text('도움말 보기'),
+                                  onPressed: () {
+                                    final snackBar = SnackBar(
+                                      content: const Text(''),
+                                      action: SnackBarAction(
+                                        label: '도움말 닫기',
+                                        onPressed: () {},
+                                      ),
+                                    );
+                                    ScaffoldMessenger.of(
+                                      context,
+                                    ).showSnackBar(snackBar);
+                                  },
+                                ),
                               ],
                             ),
                           ),
