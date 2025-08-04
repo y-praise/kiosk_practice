@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'language.dart';
+import './language.dart';
 
 class Mainscreen extends StatefulWidget {
   const Mainscreen({super.key});
@@ -64,6 +64,18 @@ class _MainScreenState extends State<Mainscreen> {
                   );
                 },
                 child: Image.asset("assets/images/airportC.png"),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 350, left: 100),
+              padding: EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Text(
+                '원하는 항공사를 눌러주세요',
+                style: TextStyle(fontSize: 18.0, color: Colors.white),
               ),
             ),
           ],

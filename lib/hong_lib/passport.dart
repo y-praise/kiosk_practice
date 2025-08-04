@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'information.dart';
+import './information.dart';
 
 class Passport extends StatefulWidget {
   const Passport({super.key});
@@ -57,6 +57,21 @@ class _PassportState extends State<Passport> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 420,
+            left: 15,
+            child: Container(
+              padding: EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Text(
+                '여권 스캔 방법 확인 후 다음단계 버튼을 눌러주세요',
+                style: TextStyle(fontSize: 18.0, color: Colors.white),
               ),
             ),
           ),

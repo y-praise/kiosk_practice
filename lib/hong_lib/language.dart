@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'caution.dart';
+import './caution.dart';
 
 class Language extends StatefulWidget {
   const Language({super.key});
@@ -41,6 +41,18 @@ class _LanguageState extends State<Language> {
                   );
                 },
                 child: Image.asset("assets/images/korean.png"),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 350, left: 100),
+              padding: EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Text(
+                '언어 중 한국어를 눌러주세요',
+                style: TextStyle(fontSize: 18.0, color: Colors.white),
               ),
             ),
           ],

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'flight.dart';
+import './flight.dart';
 
 class Caution extends StatefulWidget {
   const Caution({super.key});
@@ -51,6 +51,18 @@ class _CautionState extends State<Caution> {
                   ),
                 ),
               ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 350, left: 40),
+            padding: EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            child: Text(
+              '주의사항을 읽고 다음단계 버튼을 눌러주세요',
+              style: TextStyle(fontSize: 18.0, color: Colors.white),
             ),
           ),
         ],

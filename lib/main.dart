@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import '/jung_lib/main.dart';
 import 'firstpage.dart';
 import 'yoon_lib/outline.dart';
-import 'jung_lib/screens/kiosk_screen.dart';
-import 'hong_lib/screens/first_screen.dart';
+import 'hong_lib/first_screen.dart';
 import 'jang_lib/screens/home.dart';
 
 void main() {
@@ -15,11 +15,12 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
         '/': (context) => Firstpage(),
         '/yoon': (context) => CivilServiceMachine(),
-        '/jung': (context) => KioskScreen(),
+        '/jung': (context) => MyApp(),
         '/hong': (context) => Mainscreen(),
         '/jang': (context)  => HomeScreen()
       },

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'flight.dart';
-import 'seat.dart';
+import './flight.dart';
+import './seat.dart';
 
 class Information extends StatefulWidget {
   const Information({super.key});
@@ -135,6 +135,22 @@ class _InformationState extends State<Information> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
+              ),
+            ),
+          ),
+          Positioned(
+            width: 330,
+            top: 350,
+            left: 60,
+            child: Container(
+              padding: EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Text(
+                '출발지와 도착지를 확인하고 좌석선택 버튼을 눌러주세요',
+                style: TextStyle(fontSize: 18.0, color: Colors.white),
               ),
             ),
           ),

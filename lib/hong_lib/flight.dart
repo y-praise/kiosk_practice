@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'passport.dart';
-import '../models/flightselect.dart';
+import './passport.dart';
+import './flightselect.dart';
 
 flightmenu inf = flightmenu(country: "선택", destination: "선택", flnumber: "선택");
 
@@ -81,7 +81,7 @@ class _FlihgtState extends State<Flight> {
                   InkWell(
                     onTap: () {
                       setState(() {
-                        bvisible = true;
+                        avisible = true;
                         bbutton = const Color.fromARGB(255, 1, 139, 125);
                         abutton = Colors.white;
                         btext = Colors.white;
@@ -335,6 +335,19 @@ class _FlihgtState extends State<Flight> {
                 ),
               ),
             ],
+          ),
+          Container(
+            width: 340,
+            margin: EdgeInsets.only(top: 50, left: 0),
+            padding: EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            child: Text(
+              '국가 도착지 편명을 선택하고 다음단계 버튼을 눌러주세요',
+              style: TextStyle(fontSize: 18.0, color: Colors.white),
+            ),
           ),
         ],
       ),
