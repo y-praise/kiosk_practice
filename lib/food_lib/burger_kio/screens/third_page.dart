@@ -1,6 +1,7 @@
+// lib/third_page.dart
 import 'package:flutter/material.dart';
 import 'fourth_page.dart';
-import '../utils.dart';
+import '../utils.dart'; // 이 파일은 수정되지 않음
 
 class ThirdPage extends StatefulWidget {
   const ThirdPage({super.key});
@@ -77,74 +78,48 @@ class _ThirdPageState extends State<ThirdPage> {
     ],
   };
 
-  void _onMenuItemTap(Map<String, dynamic> menuData) async {
-    final String menuItemName = menuData['name']!;
-    final String imageUrl = menuData['imageUrl'] ?? 'assets/images/burger.png';
-
-    if (_selectedCategory == '버거' && menuData.containsKey('options')) {
-      final List<Map<String, dynamic>> options = List<Map<String, dynamic>>.from(menuData['options']);
-      final Map<String, dynamic>? selectedConfig =
-      await _showBurgerCustomizationDialog(menuItemName, options);
-
-      if (selectedConfig != null) {
-        String finalItemName = selectedConfig['optionName'];
-        int finalPrice = selectedConfig['finalPrice'];
-        bool removePickle = selectedConfig['removePickle'] ?? false;
-        bool removeOnion = selectedConfig['removeOnion'] ?? false;
-        String? selectedDrink = selectedConfig['selectedDrink'];
-
-        if (removePickle) finalItemName += ' (피클X)';
-        if (removeOnion) finalItemName += ' (양파X)';
-        if (selectedDrink != null) finalItemName += ' (${selectedDrink})';
-
-        setState(() {
-          _orderList.add({
-            'name': finalItemName,
-            'price': finalPrice,
-            'quantity': 1,
-            'isBurger': true,
-            'imageUrl': imageUrl,
-          });
-        });
-      }
-    } else {
-      final int? itemPrice = menuData['price'];
-      final bool? confirm = await showDialog<bool>(
-        context: context,
-        builder: (BuildContext dialogContext) {
-          return AlertDialog(
-            title: Text('$menuItemName을(를) 주문하시겠습니까?', style: TextStyle(fontSize: 20.sp)),
-            content: itemPrice != null ? Text('가격: $itemPrice원', style: TextStyle(fontSize: 16.sp)) : null,
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.pop(dialogContext, false),
-                child: Text('취소', style: TextStyle(fontSize: 18.sp)),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pop(dialogContext, true),
-                child: Text('확인', style: TextStyle(fontSize: 18.sp)),
-              ),
-            ],
-          );
-        },
-      );
-
-      if (confirm == true) {
-        setState(() {
-          _orderList.add({
-            'name': menuItemName,
-            'price': itemPrice ?? 0,
-            'quantity': 1,
-            'isBurger': false,
-            'imageUrl': imageUrl,
-          });
-        });
-      }
-    }
+  bool _isSetSelected(List<Map<String, dynamic>> options, int? selectedIndex) {
+    if (selectedIndex == null || selectedIndex < 0 || selectedIndex >= options.length) return false;
+    final String optionName = options[selectedIndex]['optionName'];
+    return optionName.contains('세트');
   }
 
-  Future<Map<String, dynamic>?> _showBurgerCustomizationDialog(
-      String burgerName, List<Map<String, dynamic>> options) async {
+  // Widget for the help bubble.
+  Widget _buildHelpBubble({
+    required String text,
+    double? top,
+    double? left,
+    double? right,
+    double? bottom,
+  }) {
+    return Positioned(
+      top: top,
+      left: left,
+      right: right,
+      bottom: bottom,
+      child: Visibility(
+        visible: _showHelpBubbles,
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.7), // 반투명한 배경
+            borderRadius: BorderRadius.circular(20.w),
+          ),
+          child: Text(
+            text,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18.sp,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // 클래스 레벨 함수로 이동
+  Future<Map<String, dynamic>?> _showBurgerCustomizationDialogAdjusted(
+      BuildContext context, double bodyWidth, String burgerName, List<Map<String, dynamic>> options) async {
     int _selectedOptionIndex = 0;
     bool _removePickle = false;
     bool _removeOnion = false;
@@ -164,7 +139,6 @@ class _ThirdPageState extends State<ThirdPage> {
               if (_selectedOptionIndex >= 0 && _selectedOptionIndex < options.length) {
                 price = options[_selectedOptionIndex]['price'];
               }
-
               if (_selectedDrink == '과일 주스') {
                 price += 600;
               }
@@ -172,12 +146,11 @@ class _ThirdPageState extends State<ThirdPage> {
             }
 
             int currentCalculatedPrice = calculatePrice();
-
             return Dialog(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.w)),
               child: Container(
                 padding: EdgeInsets.all(20.w),
-                width: MediaQuery.of(context).size.width * 0.9,
+                width: bodyWidth * 0.9,
                 constraints: BoxConstraints(maxWidth: 600.w, maxHeight: 600.h),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -192,9 +165,7 @@ class _ThirdPageState extends State<ThirdPage> {
                         ),
                         IconButton(
                           icon: Icon(Icons.close, size: 24.sp),
-                          onPressed: () {
-                            Navigator.pop(context, null);
-                          },
+                          onPressed: () => Navigator.pop(context, null),
                         ),
                       ],
                     ),
@@ -234,18 +205,14 @@ class _ThirdPageState extends State<ThirdPage> {
                               title: Text('피클 제거', style: TextStyle(fontSize: 16.sp)),
                               value: _removePickle,
                               onChanged: (bool? value) {
-                                setStateInDialog(() {
-                                  _removePickle = value!;
-                                });
+                                setStateInDialog(() => _removePickle = value!);
                               },
                             ),
                             CheckboxListTile(
                               title: Text('양파 제거', style: TextStyle(fontSize: 16.sp)),
                               value: _removeOnion,
                               onChanged: (bool? value) {
-                                setStateInDialog(() {
-                                  _removeOnion = value!;
-                                });
+                                setStateInDialog(() => _removeOnion = value!);
                               },
                             ),
                             if (_isSetSelected(options, _selectedOptionIndex))
@@ -260,9 +227,7 @@ class _ThirdPageState extends State<ThirdPage> {
                                       value: drink,
                                       groupValue: _selectedDrink,
                                       onChanged: (String? value) {
-                                        setStateInDialog(() {
-                                          _selectedDrink = value;
-                                        });
+                                        setStateInDialog(() => _selectedDrink = value);
                                       },
                                     );
                                   }).toList(),
@@ -286,9 +251,7 @@ class _ThirdPageState extends State<ThirdPage> {
                       children: [
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context, null);
-                            },
+                            onPressed: () => Navigator.pop(context, null),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.grey,
                               minimumSize: Size(120.w, 50.h),
@@ -301,16 +264,16 @@ class _ThirdPageState extends State<ThirdPage> {
                         Expanded(
                           child: ElevatedButton(
                             onPressed: _selectedOptionIndex != null &&
-                                (!_isSetSelected(options, _selectedOptionIndex) || _selectedDrink != null)
+                                    (!_isSetSelected(options, _selectedOptionIndex) || _selectedDrink != null)
                                 ? () {
-                              Navigator.pop(context, {
-                                'optionName': options[_selectedOptionIndex]['optionName'],
-                                'finalPrice': currentCalculatedPrice,
-                                'removePickle': _removePickle,
-                                'removeOnion': _removeOnion,
-                                'selectedDrink': _selectedDrink,
-                              });
-                            }
+                                    Navigator.pop(context, {
+                                      'optionName': options[_selectedOptionIndex]['optionName'],
+                                      'finalPrice': currentCalculatedPrice,
+                                      'removePickle': _removePickle,
+                                      'removeOnion': _removeOnion,
+                                      'selectedDrink': _selectedDrink,
+                                    });
+                                  }
                                 : null,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.red,
@@ -332,20 +295,12 @@ class _ThirdPageState extends State<ThirdPage> {
     );
   }
 
-  bool _isSetSelected(List<Map<String, dynamic>> options, int? selectedIndex) {
-    if (selectedIndex == null || selectedIndex < 0 || selectedIndex >= options.length) return false;
-    final String optionName = options[selectedIndex]['optionName'];
-    return optionName.contains('세트');
-  }
-
-  // 사이드 메뉴 팝업 함수
-  Future<void> _showSideMenuDialog() async {
+  Future<void> _showSideMenuDialogAdjusted(BuildContext context, double bodyWidth) async {
     final List<Map<String, dynamic>> sideMenus = [
-      _menus['사이드']![0], // 감자튀김
-      _menus['사이드']![1], // 치즈스틱
-      _menus['사이드']![2], // 어니언링
+      _menus['사이드']![0],
+      _menus['사이드']![1],
+      _menus['사이드']![2],
     ];
-
     List<Map<String, dynamic>> _selectedSideMenuItems = [];
 
     await showDialog<void>(
@@ -357,7 +312,7 @@ class _ThirdPageState extends State<ThirdPage> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.w)),
               child: Container(
                 padding: EdgeInsets.all(20.w),
-                width: MediaQuery.of(context).size.width * 0.9,
+                width: bodyWidth * 0.9,
                 constraints: BoxConstraints(maxWidth: 600.w, maxHeight: 650.h),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -371,9 +326,7 @@ class _ThirdPageState extends State<ThirdPage> {
                         ),
                         IconButton(
                           icon: Icon(Icons.close, size: 24.sp),
-                          onPressed: () {
-                            Navigator.pop(dialogContext);
-                          },
+                          onPressed: () => Navigator.pop(dialogContext),
                         ),
                       ],
                     ),
@@ -391,7 +344,6 @@ class _ThirdPageState extends State<ThirdPage> {
                         itemBuilder: (context, index) {
                           final item = sideMenus[index];
                           final bool isSelected = _selectedSideMenuItems.any((selectedItem) => selectedItem['name'] == item['name']);
-
                           return GestureDetector(
                             onTap: () {
                               setStateInDialog(() {
@@ -406,9 +358,7 @@ class _ThirdPageState extends State<ThirdPage> {
                               elevation: isSelected ? 8 : 4,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.w),
-                                side: isSelected
-                                    ? const BorderSide(color: Colors.blue, width: 3)
-                                    : BorderSide.none,
+                                side: isSelected ? const BorderSide(color: Colors.blue, width: 3) : BorderSide.none,
                               ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -416,20 +366,14 @@ class _ThirdPageState extends State<ThirdPage> {
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(5.w),
                                     child: Image.asset(
-                                      item['imageUrl'] ?? 'assets/images/burger.png', // 이미지 경로 추가
+                                      item['imageUrl'] ?? 'assets/images/burger.png',
                                       width: 80.w,
                                       height: 80.h,
                                       fit: BoxFit.cover,
-                                      errorBuilder: (context, error, stackTrace) {
-                                        return Container(
-                                          width: 80.w,
-                                          height: 80.h,
-                                          color: Colors.grey[200],
-                                          child: Center(
-                                            child: Icon(Icons.broken_image, size: 40.w, color: Colors.grey),
-                                          ),
-                                        );
-                                      },
+                                      errorBuilder: (context, error, stackTrace) => Container(
+                                        width: 80.w, height: 80.h, color: Colors.grey[200],
+                                        child: Center(child: Icon(Icons.broken_image, size: 40.w, color: Colors.grey)),
+                                      ),
                                     ),
                                   ),
                                   SizedBox(height: 10.h),
@@ -456,9 +400,7 @@ class _ThirdPageState extends State<ThirdPage> {
                       children: [
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(dialogContext);
-                            },
+                            onPressed: () => Navigator.pop(dialogContext),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.grey,
                               textStyle: TextStyle(fontSize: 20.sp),
@@ -473,17 +415,13 @@ class _ThirdPageState extends State<ThirdPage> {
                             onPressed: () {
                               setState(() {
                                 for (var item in _selectedSideMenuItems) {
-                                  final existingItemIndex = _orderList.indexWhere(
-                                          (orderItem) => orderItem['name'] == item['name']);
+                                  final existingItemIndex = _orderList.indexWhere((orderItem) => orderItem['name'] == item['name']);
                                   if (existingItemIndex != -1) {
                                     _orderList[existingItemIndex]['quantity']++;
                                   } else {
                                     _orderList.add({
-                                      'name': item['name'],
-                                      'price': item['price'],
-                                      'quantity': 1,
-                                      'isBurger': false,
-                                      'imageUrl': item['imageUrl'] ?? 'assets/images/burger.png',
+                                      'name': item['name'], 'price': item['price'], 'quantity': 1,
+                                      'isBurger': false, 'imageUrl': item['imageUrl'] ?? 'assets/images/burger.png',
                                     });
                                   }
                                 }
@@ -509,7 +447,7 @@ class _ThirdPageState extends State<ThirdPage> {
       },
     );
 
-    int total = _orderList.fold(0, (sum, item) => sum + (item['price'] * item['quantity'] as int)); // totalAmount 계산 로직 변경
+    int total = _orderList.fold(0, (sum, item) => sum + (item['price'] * item['quantity'] as int));
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -518,62 +456,103 @@ class _ThirdPageState extends State<ThirdPage> {
           totalAmount: total,
         ),
       ),
-    ).then((_) {
-      setState(() {
-        _orderList.clear();
-      });
-    });
+    ).then((_) => setState(() => _orderList.clear()));
   }
 
-  // Widget for the help bubble.
-  Widget _buildHelpBubble({
-    required String text,
-    double? top,
-    double? left,
-    double? right,
-    double? bottom,
-  }) {
-    return Positioned(
-      top: top,
-      left: left,
-      right: right,
-      bottom: bottom,
-      child: Visibility(
-        visible: _showHelpBubbles,
-        child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.7), // 반투명한 배경
-                    borderRadius: BorderRadius.circular(20.w),
+  // 클래스 레벨 함수로 이동
+  void _onMenuItemTapAdjusted(BuildContext context, double bodyWidth, Map<String, dynamic> menuData) async {
+    final String menuItemName = menuData['name']!;
+    final String imageUrl = menuData['imageUrl'] ?? 'assets/images/burger.png';
+
+    if (_selectedCategory == '버거' && menuData.containsKey('options')) {
+      final List<Map<String, dynamic>> options = List<Map<String, dynamic>>.from(menuData['options']);
+      final Map<String, dynamic>? selectedConfig =
+          await _showBurgerCustomizationDialogAdjusted(context, bodyWidth, menuItemName, options);
+
+      if (selectedConfig != null) {
+        String finalItemName = selectedConfig['optionName'];
+        int finalPrice = selectedConfig['finalPrice'];
+        bool removePickle = selectedConfig['removePickle'] ?? false;
+        bool removeOnion = selectedConfig['removeOnion'] ?? false;
+        String? selectedDrink = selectedConfig['selectedDrink'];
+
+        if (removePickle) finalItemName += ' (피클X)';
+        if (removeOnion) finalItemName += ' (양파X)';
+        if (selectedDrink != null) finalItemName += ' (${selectedDrink})';
+
+        setState(() {
+          _orderList.add({
+            'name': finalItemName,
+            'price': finalPrice,
+            'quantity': 1,
+            'isBurger': true,
+            'imageUrl': imageUrl,
+          });
+        });
+      }
+    } else {
+      final int? itemPrice = menuData['price'];
+      final bool? confirm = await showDialog<bool>(
+        context: context,
+        builder: (BuildContext dialogContext) {
+          return Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.w)),
+            child: Container(
+              padding: EdgeInsets.all(20.w),
+              width: bodyWidth * 0.9,
+              constraints: BoxConstraints(maxWidth: 600.w),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    menuItemName,
+                    style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
                   ),
-                  child: Text(
-                    text,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18.sp,
-                    ),
+                  const Divider(),
+                  itemPrice != null
+                      ? Text('가격: $itemPrice원', style: TextStyle(fontSize: 16.sp))
+                      : const SizedBox.shrink(),
+                  SizedBox(height: 20.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      TextButton(
+                          onPressed: () => Navigator.pop(dialogContext, false),
+                          child: Text('취소', style: TextStyle(fontSize: 18.sp))),
+                      TextButton(
+                          onPressed: () => Navigator.pop(dialogContext, true),
+                          child: Text('확인', style: TextStyle(fontSize: 18.sp))),
+                    ],
                   ),
-                ),
-      ),
-    );
+                ],
+              ),
+            ),
+          );
+        },
+      );
+
+      if (confirm == true) {
+        setState(() {
+          _orderList.add({
+            'name': menuItemName,
+            'price': itemPrice ?? 0,
+            'quantity': 1,
+            'isBurger': false,
+            'imageUrl': imageUrl,
+          });
+        });
+      }
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
-    // 총 결제 금액 계산 함수
-    int _getTotalAmount() {
-      int total = 0;
-      for (var item in _orderList) {
-        total += (item['price'] as int) * (item['quantity'] as int);
-      }
-      return total;
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text('메뉴 선택', style: TextStyle(fontSize: 22.sp)),
         actions: [
-          // The new help button
           IconButton(
             icon: Icon(Icons.help_outline, size: 24.sp),
             onPressed: () {
@@ -584,300 +563,253 @@ class _ThirdPageState extends State<ThirdPage> {
           ),
         ],
       ),
-      body: Stack(
-        children: [
-          Column(
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          double bodyWidth = constraints.maxWidth;
+
+          return Stack(
             children: [
-              SizedBox(height: 20.h),
-              Container(
-                height: 80.h,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20.w),
-                    topRight: Radius.circular(20.w),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      spreadRadius: 1.w,
-                      blurRadius: 5.w,
-                      offset: Offset(0, 3.h),
-                    ),
-                  ],
-                ),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  padding: EdgeInsets.symmetric(horizontal: 10.w),
-                  child: Row(
-                    children: _menus.keys.map((category) {
-                      String buttonText = category;
-                      return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5.w),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              _selectedCategory = category;
-                            });
-                          },
-                          style: ElevatedButton.styleFrom(
-                            minimumSize: Size(100.w, 50.h),
-                            backgroundColor: _selectedCategory == category ? Colors.blue : Colors.grey,
-                            textStyle: TextStyle(fontSize: 18.sp),
-                          ),
-                          child: Text(buttonText),
+              Column(
+                children: [
+                  SizedBox(height: 20.h),
+                  Container(
+                    height: 80.h,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20.w),
+                        topRight: Radius.circular(20.w),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          spreadRadius: 1.w,
+                          blurRadius: 5.w,
+                          offset: Offset(0, 3.h),
                         ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  color: Colors.white,
-                  child: GridView.builder(
-                    padding: EdgeInsets.all(20.w),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 20.w,
-                      mainAxisSpacing: 20.h,
-                      childAspectRatio: 0.8, // 이미지 표시를 위해 비율 조정
+                      ],
                     ),
-                    itemCount: _menus[_selectedCategory]!.length,
-                    itemBuilder: (context, index) {
-                      final menuData = _menus[_selectedCategory]![index];
-                      final String? priceText = _selectedCategory != '버거' && menuData.containsKey('price')
-                          ? '가격: ${menuData['price']}원'
-                          : null;
-
-                      return Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.w)),
-                        child: InkWell(
-                          onTap: () => _onMenuItemTap(menuData),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.vertical(top: Radius.circular(10.w)),
-                                  child: Image.asset(
-                                    menuData['imageUrl'] ?? 'assets/images/burger.png', // 이미지 경로 사용
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Container(
-                                        color: Colors.grey[200],
-                                        child: Center(
-                                          child: Icon(Icons.broken_image, size: 40.w, color: Colors.grey),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(8.w),
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      menuData['name']!,
-                                      style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
-                                      textAlign: TextAlign.center,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    if (priceText != null)
-                                      Text(
-                                        priceText,
-                                        style: TextStyle(fontSize: 15.sp, color: Colors.black54),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-              Container(
-                height: 150.h,
-                color: Colors.black87,
-                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '주문 내역:',
-                      style: TextStyle(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.bold),
-                    ),
-                    Expanded(
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: _orderList.length,
-                        itemBuilder: (context, index) {
-                          final item = _orderList[index];
-                          String itemName = item['name'];
-                          String priceInfo = '${item['price']}원 x ${item['quantity']}';
-
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      padding: EdgeInsets.symmetric(horizontal: 10.w),
+                      child: Row(
+                        children: _menus.keys.map((category) {
+                          String buttonText = category;
                           return Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 4.w),
-                            child: Card(
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.w),
+                            padding: EdgeInsets.symmetric(horizontal: 5.w),
+                            child: ElevatedButton(
+                              onPressed: () => setState(() => _selectedCategory = category),
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: Size(100.w, 50.h),
+                                backgroundColor: _selectedCategory == category ? Colors.blue : Colors.grey,
+                                textStyle: TextStyle(fontSize: 18.sp),
                               ),
-                              elevation: 2,
-                              child: SizedBox(
-                                width: 100.w, // 각 카드의 너비 고정
-                                child: Stack(
-                                  children: [
-                                    Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                              child: Text(buttonText),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      color: Colors.white,
+                      child: GridView.builder(
+                        padding: EdgeInsets.all(20.w),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 20.w,
+                          mainAxisSpacing: 20.h,
+                          childAspectRatio: 0.8,
+                        ),
+                        itemCount: _menus[_selectedCategory]!.length,
+                        itemBuilder: (context, index) {
+                          final menuData = _menus[_selectedCategory]![index];
+                          final String? priceText = _selectedCategory != '버거' && menuData.containsKey('price')
+                              ? '가격: ${menuData['price']}원'
+                              : null;
+
+                          return Card(
+                            elevation: 4,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.w)),
+                            child: InkWell(
+                              onTap: () => _onMenuItemTapAdjusted(context, bodyWidth, menuData),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.vertical(top: Radius.circular(10.w)),
+                                      child: Image.asset(
+                                        menuData['imageUrl'] ?? 'assets/images/burger.png',
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                        errorBuilder: (context, error, stackTrace) => Container(
+                                          color: Colors.grey[200],
+                                          child: Center(child: Icon(Icons.broken_image, size: 40.w, color: Colors.grey)),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8.w),
+                                    child: Column(
                                       children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(top: 8.h), // 상단 여백 추가
-                                          child: Center(
-                                            child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(5.w),
-                                              child: Image.asset(
-                                                item['imageUrl'] ?? 'assets/images/burger.png',
-                                                width: 50.w,
-                                                height: 50.h,
-                                                fit: BoxFit.cover,
-                                                errorBuilder: (context, error, stackTrace) {
-                                                  return Container(
-                                                    width: 50.w,
-                                                    height: 50.h,
-                                                    color: Colors.grey[200],
-                                                    child: Center(
-                                                      child: Icon(Icons.broken_image, size: 25.w, color: Colors.grey),
-                                                    ),
-                                                  );
-                                                },
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(height: 1.h),
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(horizontal: 4.w),
-                                          child: Text(
-                                            itemName,
-                                            style: TextStyle(fontSize: 10.sp, color: Colors.black87, fontWeight: FontWeight.bold),
-                                            textAlign: TextAlign.center,
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                        SizedBox(height: 1.h),
                                         Text(
-                                          priceInfo,
-                                          style: TextStyle(fontSize: 9.sp, color: Colors.grey),
+                                          menuData['name']!,
+                                          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
                                           textAlign: TextAlign.center,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
+                                        if (priceText != null)
+                                          Text(
+                                            priceText,
+                                            style: TextStyle(fontSize: 15.sp, color: Colors.black54),
+                                            textAlign: TextAlign.center,
+                                          ),
                                       ],
                                     ),
-                                    Positioned(
-                                      top: 0,
-                                      right: 0,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            _orderList.removeAt(index);
-                                          });
-                                        },
-                                        child: Container(
-                                          decoration: const BoxDecoration(
-                                            color: Colors.black54,
-                                            shape: BoxShape.circle,
-                                          ),
-                                          padding: EdgeInsets.all(2.w),
-                                          child: Icon(Icons.close, size: 14.sp, color: Colors.white),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
                           );
                         },
                       ),
                     ),
-                  ],
-                ),
-              ),
-              Container(
-                height: 70.h,
-                padding: EdgeInsets.all(10.w),
-                color: Colors.black87,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            _orderList.clear();
-                          });
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey,
-                          textStyle: TextStyle(fontSize: 20.sp),
+                  ),
+                  Container(
+                    height: 150.h,
+                    color: Colors.black87,
+                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '주문 내역:',
+                          style: TextStyle(color: Colors.white, fontSize: 16.sp, fontWeight: FontWeight.bold),
                         ),
-                        child: const Text('취소'),
-                      ),
-                    ),
-                    SizedBox(width: 10.w),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: _orderList.isEmpty
-                            ? null
-                            : () {
-                          _showSideMenuDialog();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          textStyle: TextStyle(fontSize: 20.sp),
-                        ),
-                        child: Text('결제하기'), // 총 금액 표시
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+                        Expanded(
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: _orderList.length,
+                            itemBuilder: (context, index) {
+                              final item = _orderList[index];
+                              String itemName = item['name'];
+                              String priceInfo = '${item['price']}원 x ${item['quantity']}';
 
-          // Help bubbles are added here, as children of the Stack.
-          // They are only visible when _showHelpBubbles is true.
-          if (_showHelpBubbles) ...[
-            // Bubble 1: "음식 종류를 여기서 선택하세요"
-            _buildHelpBubble(
-              text: "음식 종류를 선택하세요",
-              top: -5.h,
-              left: 20.w,
-            ),
-            // Bubble 2: "종류를 고르셨다면 음식을 선택하세요"
-            _buildHelpBubble(
-              text: "종류를 고르셨다면 음식을 선택하세요",
-              top: 350.h,
-              right: 60.w,
-            ),
-            // Bubble 3: "고른 음식이 여기에 보여집니다"
-            _buildHelpBubble(
-              text: "선택한 음식들이 이곳에 보여집니다\nx를 누르면 주문을 취소할 수 있습니다",
-              bottom: 80.h,
-              left: 20.w,
-            ),
-          ],
-        ],
+                              return Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 4.w),
+                                child: Card(
+                                  color: Colors.white,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.w)),
+                                  elevation: 2,
+                                  child: SizedBox(
+                                    width: 100.w,
+                                    child: Stack(
+                                      children: [
+                                        Column(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.only(top: 8.h),
+                                              child: Center(
+                                                child: ClipRRect(
+                                                  borderRadius: BorderRadius.circular(5.w),
+                                                  child: Image.asset(
+                                                    item['imageUrl'] ?? 'assets/images/burger.png',
+                                                    width: 50.w, height: 50.h, fit: BoxFit.cover,
+                                                    errorBuilder: (context, error, stackTrace) => Container(
+                                                      width: 50.w, height: 50.h, color: Colors.grey[200],
+                                                      child: Center(child: Icon(Icons.broken_image, size: 25.w, color: Colors.grey)),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: 1.h),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(horizontal: 4.w),
+                                              child: Text(
+                                                itemName,
+                                                style: TextStyle(fontSize: 10.sp, color: Colors.black87, fontWeight: FontWeight.bold),
+                                                textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                            SizedBox(height: 1.h),
+                                            Text(
+                                              priceInfo,
+                                              style: TextStyle(fontSize: 9.sp, color: Colors.grey),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ],
+                                        ),
+                                        Positioned(
+                                          top: 0,
+                                          right: 0,
+                                          child: GestureDetector(
+                                            onTap: () => setState(() => _orderList.removeAt(index)),
+                                            child: Container(
+                                              decoration: const BoxDecoration(color: Colors.black54, shape: BoxShape.circle),
+                                              padding: EdgeInsets.all(2.w),
+                                              child: Icon(Icons.close, size: 14.sp, color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: 70.h,
+                    padding: EdgeInsets.all(10.w),
+                    color: Colors.black87,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () => setState(() => _orderList.clear()),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.grey,
+                              textStyle: TextStyle(fontSize: 20.sp),
+                            ),
+                            child: const Text('취소'),
+                          ),
+                        ),
+                        SizedBox(width: 10.w),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: _orderList.isEmpty ? null : () => _showSideMenuDialogAdjusted(context, bodyWidth),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              textStyle: TextStyle(fontSize: 20.sp),
+                            ),
+                            child: Text('결제하기'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              if (_showHelpBubbles) ...[
+                _buildHelpBubble(text: "음식 종류를 선택하세요", top: 50.h, left: 20.w),
+                _buildHelpBubble(text: "종류를 고르셨다면 음식을 선택하세요", top: 350.h, right: 20.w),
+                _buildHelpBubble(text: "선택한 음식들이 이곳에 보여집니다\nx를 누르면 주문을 취소할 수 있습니다", bottom: 120.h, left: 20.w),
+              ],
+            ],
+          );
+        },
       ),
     );
   }
