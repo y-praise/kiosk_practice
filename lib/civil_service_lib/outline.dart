@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
-import 'pension/pension_announcement.dart';
-import 'employment/employment_announcement.dart';
-import 'passport/passport_announcement.dart';
-import 'health/health_announcement.dart';
-import 'traffic/traffic_announcement.dart';
-import 'real_estate/real_estate_announcement.dart';
-import 'tax/tax_announcement.dart';
-import 'expulsion/expulsion_announcement.dart';
-import 'family/family_announcement.dart';
-import 'military/military_announcement.dart';
-import 'common_pages/mobile_ID.dart';
-import 'common_pages/main_page.dart';
-import 'common_pages/fingerprint.dart';
-import 'registration/announcement.dart';
-import 'car/car_announcement.dart';
-import 'welfare/welfare_announcement.dart';
+import 'car/car_pages.dart';
+import 'common_pages/common_pages.dart';
+import 'employment/employment_pages.dart';
+import 'expulsion/expulsion_pages.dart';
+import 'family/family_pages.dart';
+import 'health/health_pages.dart';
+import 'military/military_pages.dart';
+import 'real_estate/real_estate_pages.dart';
+import 'registration/registration_pages.dart';
+import 'tax/tax_pages.dart';
+import 'traffic/traffic_pages.dart';
+import 'welfare/welfare_pages.dart';
+import 'pension/pension_pages.dart';
+import 'passport/passport_pages.dart';
 import 'widgets.dart';
 import 'dart:math';
 
@@ -29,6 +27,8 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
   late String instruction;
   int cash = 0;
   bool vertification = false;
+  bool _showHelpOverlay = false;
+  bool isPrinted = false;
 
   @override
   void initState() {
@@ -40,12 +40,18 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
     setState(() {
       _page = LoadingPage();
       page_number = new_page_num;
+      print('${page_number}');
     });
 
     int randomNumber = Random().nextInt(5);
     Future.delayed(Duration(seconds: randomNumber), () {
       setState(() {
         _page = newPage;
+        if (_page.runtimeType == LastPage) {
+          isPrinted = true;
+        } else {
+          isPrinted = false;
+        }
       });
     });
   }
@@ -210,7 +216,7 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
               page_number,
             );
             break;
-          
+
           case 13.1:
           case 13.2:
           case 13.3:
@@ -228,169 +234,190 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
     });
   }
 
+  Widget paper() {
+    return Positioned(
+      bottom: 13,
+      left: 70,
+      child: Container(
+        width: 160,
+        height: 40,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(0),
+            ),
+          ),
+          onPressed: () {
+            setState(() {
+              isPrinted = false;
+            });
+          },
+          child: Text('증명서'),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('무인민원발급창구'),),
+      appBar: AppBar(
+        title: Text('무인민원발급창구'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.help_outline, color: Colors.black),
+            // 버튼 클릭 시 _showHelpOverlay 상태를 토글
+            onPressed: () {
+              setState(() {
+                _showHelpOverlay = !_showHelpOverlay;
+              });
+            },
+          ),
+        ],
+      ),
       backgroundColor: const Color.fromARGB(255, 182, 232, 255),
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 3, //Display 가로 비율
-                  child: Container(
-                    decoration: BoxDecoration(border: Border.all(width: 2)),
-                    padding: EdgeInsets.fromLTRB(3, 20, 3, 20),
-                    child: Column(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(width: 10),
-                            ),
-                            child: Column(
-                              children: [
-                                Expanded(flex: 6, child: _page),
-                                Expanded(
-                                  flex: 1,
-                                  child: buttonWidget(
-                                    context,
-                                    () => _switch_page(
-                                      MainPage(
-                                        switchPageCallback: _switch_page,
+          Column(
+            children: [
+              Expanded(
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 3, //Display 가로 비율
+                      child: Container(
+                        decoration: BoxDecoration(border: Border.all(width: 2)),
+                        padding: EdgeInsets.fromLTRB(3, 20, 3, 20),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              flex: 9,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(width: 10),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Expanded(flex: 6, child: _page),
+                                    Expanded(
+                                      flex: 1,
+                                      child: buttonWidget(
+                                        context,
+                                        () => _switch_page(
+                                          MainPage(
+                                            switchPageCallback: _switch_page,
+                                          ),
+                                          0.0,
+                                        ),
+                                        '처음 화면',
                                       ),
-                                      0.0,
                                     ),
-                                    '처음 화면',
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 3,
-                                  child: Container(
-                                    padding: EdgeInsets.all(5),
-                                    width: double.infinity,
-                                    child: Image.asset(
-                                      'assets/images/mobile_ID.png',
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Center(
-                          child: Column(
-                            children: [
-                              Container(
-                                color: Colors.black,
-                                margin: EdgeInsets.all(5),
-                                padding: EdgeInsets.all(3),
-                                child: Text(
-                                  '증명서 나오는 곳',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 10,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                width: 200,
-                                height: 5,
-                                color: Colors.black,
-                                margin: EdgeInsets.fromLTRB(0, 1, 0, 0),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                Expanded(
-                  flex: 1, //오른쪽 박스
-                  child: Container(
-                    decoration: BoxDecoration(border: Border.all(width: 1)),
-                    child: Column(
-                      children: [
-                        Expanded(
-                          flex: 9,
-                          child: Container(
-                            color: const Color.fromARGB(255, 36, 36, 36),
-                            margin: EdgeInsets.all(3),
-                            child: Column(
-                              children: [
-                                Container(
-                                  color: Colors.white,
-                                  width: 80,
-                                  height: 60,
-                                  margin: EdgeInsets.fromLTRB(10, 20, 10, 20),
-                                  child: Container(
-                                    color: Colors.red,
-                                    margin: EdgeInsets.all(5),
-                                    child: Text(
-                                      '🚓',
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  color: Colors.black,
-                                  width: 80,
-                                  height: 60,
-                                  margin: EdgeInsets.fromLTRB(10, 20, 10, 20),
-                                  padding: EdgeInsets.all(4),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.all(1),
+                                    Expanded(
+                                      flex: 3,
+                                      child: Container(
+                                        padding: EdgeInsets.all(5),
+                                        width: double.infinity,
                                         child: Image.asset(
-                                          'assets/images/j-dragon.png',
-                                          height: 35,
+                                          'assets/images/mobile_ID.png',
+                                          fit: BoxFit.fill,
                                         ),
                                       ),
-                                      Text(
-                                        '경보시스템 작동중',
-                                        style: TextStyle(
-                                          color: Colors.yellow,
-                                          fontSize: 8,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                                Container(
-                                  color: Colors.black,
-                                  width: 80,
-                                  height: 40,
-                                  margin: EdgeInsets.all(10),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        '$cash',
-                                        style: TextStyle(color: Colors.red),
-                                        textAlign: TextAlign.right,
-                                      ),
-                                      Text(
-                                        '현재금액',
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      color: Colors.black,
+                                      margin: EdgeInsets.all(5),
+                                      padding: EdgeInsets.all(3),
+                                      child: Text(
+                                        '증명서 나오는 곳',
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 10,
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    Container(
+                                      width: 200,
+                                      height: 5,
+                                      color: Colors.black,
+                                      margin: EdgeInsets.fromLTRB(0, 1, 0, 0),
+                                    ),
+                                  ],
                                 ),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(1, 20, 1, 20),
-                                  child: Row(
-                                    children: [
-                                      Column(
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    Expanded(
+                      flex: 1, //오른쪽 박스
+                      child: Container(
+                        decoration: BoxDecoration(border: Border.all(width: 1)),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              flex: 9,
+                              child: Container(
+                                color: const Color.fromARGB(255, 36, 36, 36),
+                                margin: EdgeInsets.all(3),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      color: Colors.white,
+                                      width: 80,
+                                      height: 60,
+                                      margin: EdgeInsets.fromLTRB(
+                                        10,
+                                        20,
+                                        10,
+                                        20,
+                                      ),
+                                      child: Container(
+                                        color: Colors.red,
+                                        margin: EdgeInsets.all(5),
+                                        child: Text(
+                                          '🚓',
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+
+                                    Container(
+                                      color: Colors.black,
+                                      width: 80,
+                                      height: 40,
+                                      margin: EdgeInsets.all(10),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            '$cash',
+                                            style: TextStyle(color: Colors.red),
+                                            textAlign: TextAlign.right,
+                                          ),
+                                          Text(
+                                            '현재금액',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 10,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.fromLTRB(1, 20, 1, 20),
+                                      child: Column(
                                         children: [
                                           Container(
                                             color: Colors.black,
@@ -454,42 +481,38 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
                                           ),
                                         ],
                                       ),
-                                      Spacer(),
-                                      Column(
-                                        children: [
-                                          Container(
-                                            color: Colors.black,
-                                            margin: EdgeInsets.all(5),
-                                            padding: EdgeInsets.all(3),
-                                            child: Text(
-                                              '동전 \n넣는 곳',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 10,
-                                              ),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ),
-                                          Container(
-                                            width: 7,
-                                            height: 50,
-                                            child: ElevatedButton(
-                                              onPressed: _insert_coin,
-                                              style: ElevatedButton.styleFrom(),
-                                              child: Text(''),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                    ),
 
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(1, 20, 1, 20),
-                                  child: Row(
-                                    children: [
-                                      Column(
+                                    Column(
+                                      children: [
+                                        Container(
+                                          color: Colors.black,
+                                          margin: EdgeInsets.all(5),
+                                          padding: EdgeInsets.all(3),
+                                          child: Text(
+                                            '동전 \n넣는 곳',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 10,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                        Container(
+                                          width: 7,
+                                          height: 50,
+                                          child: ElevatedButton(
+                                            onPressed: _insert_coin,
+                                            style: ElevatedButton.styleFrom(),
+                                            child: Text(''),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                    Container(
+                                      margin: EdgeInsets.fromLTRB(1, 20, 1, 20),
+                                      child: Column(
                                         children: [
                                           Container(
                                             color: Colors.black,
@@ -536,107 +559,46 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
                                           ),
                                         ],
                                       ),
-                                      Spacer(),
-                                      Column(
-                                        children: [
-                                          Container(
-                                            color: Colors.black,
-                                            margin: EdgeInsets.all(5),
-                                            padding: EdgeInsets.all(3),
-                                            child: Text(
-                                              '신용카드',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 10,
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: 50,
-                                            height: 35,
-                                            color: const Color.fromARGB(
-                                              255,
-                                              219,
-                                              219,
-                                              219,
-                                            ),
-                                            padding: EdgeInsets.fromLTRB(
-                                              2,
-                                              15,
-                                              2,
-                                              15,
-                                            ),
-                                            child: Container(
-                                              child: ElevatedButton(
-                                                onPressed: _insert_cash,
-                                                style: ElevatedButton.styleFrom(
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          0,
-                                                        ),
-                                                  ),
-                                                  backgroundColor: Colors.black,
-                                                ),
-                                                child: Text(''),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                                ElevatedButton(
-                                  child: Text('도움말 보기'),
-                                  onPressed: () {
-                                    final snackBar = SnackBar(
-                                      content: const Text(''),
-                                      action: SnackBarAction(
-                                        label: '도움말 닫기',
-                                        onPressed: () {},
-                                      ),
-                                    );
-                                    ScaffoldMessenger.of(
-                                      context,
-                                    ).showSnackBar(snackBar);
-                                  },
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Column(
-                            children: [
-                              Container(
-                                color: Colors.black,
-                                margin: EdgeInsets.all(5),
-                                padding: EdgeInsets.all(3),
-                                child: Text(
-                                  '영수증',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 10,
+                            Expanded(
+                              flex: 1,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    color: Colors.black,
+                                    margin: EdgeInsets.all(5),
+                                    padding: EdgeInsets.all(3),
+                                    child: Text(
+                                      '영수증',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 10,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  Container(
+                                    width: 70,
+                                    height: 5,
+                                    color: Colors.black,
+                                  ),
+                                ],
                               ),
-                              Container(
-                                width: 70,
-                                height: 5,
-                                color: Colors.black,
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
+          if (_showHelpOverlay) showHelpBubble(page: _page),
+          if (isPrinted) paper(),
         ],
       ),
     );

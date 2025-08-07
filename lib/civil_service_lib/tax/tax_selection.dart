@@ -84,7 +84,7 @@ class SelectionPageState extends State<TaxSelectionPage> {
             margin: EdgeInsets.all(5),
             child: Column(
               children: [
-                _radioButton('주민등록번호 표기 방법', '전체표기', '일부 표기', 0,),
+                _radioButton('주민등록번호\n표기 방법', '전체표기', '일부 표기', 0,),
                 Row(
                   children: [
                     Text('주소(영업소)'),

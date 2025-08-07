@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'firstpage.dart';
 import 'food_lib/main.dart';
-import 'civil_service_lib/outline.dart';
+import 'civil_service_lib/main.dart';
 import 'airport_lib/main.dart';
 import 'table_lib/main.dart';
 
@@ -19,7 +19,7 @@ class MainApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => Firstpage(),
-        '/civil_service': (context) => CivilServiceMachine(),
+        '/civil_service': (context) => CivilServiceMain(),
         '/food': (context) => FoodMain(),
         '/airport': (context) => AirportMain(),
         '/table': (context)  => TableMain()

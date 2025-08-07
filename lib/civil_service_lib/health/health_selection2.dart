@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'health_circulation.dart';
 import '../widgets.dart';
 
-class HealthSelectionPage3 extends StatefulWidget {
+class HealthSelectionPage2 extends StatefulWidget {
   final Function(Widget, double)
   switchPageCallback; // switchPageCallback을 생성자로 받음4
   final double page_num;
 
-  const HealthSelectionPage3({
+  const HealthSelectionPage2({
     Key? key,
     required this.switchPageCallback,
     required this.page_num,
   }) : super(key: key);
 
   @override
-  State createState() => SelectionPageState();
+  State createState() => SelectionPage2State();
 }
 
-class SelectionPageState extends State<HealthSelectionPage3> {
+class SelectionPage2State extends State<HealthSelectionPage2> {
   List<String?> selectedOption = ['', '', '', ''];
 
   Widget _radioButton(String text, String option1, String option2, int n) {
@@ -136,8 +136,8 @@ class SelectionPageState extends State<HealthSelectionPage3> {
             child: Column(
               children: [
                 Row(children: [Text('약관동의')]),
-                _radioButton('개인정보 수집 및 동의 약관', '동의하지 않음', '동의함', 0),
-                _radioButton('고유식별정보 수집 및 이용 동의', '동의하지 않음', '동의함', 1),
+                _radioButton('개인정보 수집 \n및 동의 약관', '동의하지 않음', '동의함', 0),
+                _radioButton('고유식별정보 수집 \n및 이용 동의', '동의하지 않음', '동의함', 1),
                 SizedBox(height: 50,),
                 _radioButton2('재발급사유', '분실', '훼손', '기타', 2),
                 _radioButton2('발송지구분', '가입자주소', '사업장주소', '수령자주소', 3),

@@ -14,10 +14,10 @@ class TrafficSelectionPage2 extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State createState() => SelectionPageState();
+  State createState() => SelectionPage2State();
 }
 
-class SelectionPageState extends State<TrafficSelectionPage2> {
+class SelectionPage2State extends State<TrafficSelectionPage2> {
   List<String?> selectedOption = ['', '', ''];
 
   Widget _radioButton(String text, String option1, String option2, int n) {

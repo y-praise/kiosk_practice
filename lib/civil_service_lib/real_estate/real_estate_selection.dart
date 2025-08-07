@@ -171,7 +171,7 @@ class SelectionPageState extends State<RealEstateSelectionPage> {
                   ],
                 ),
                 SizedBox(height: 10,),
-                _radioButton('주민등록번호 공개 여부', '미공개', '공개', 2),
+                _radioButton('주민등록번호\n공개 여부', '미공개', '공개', 2),
                 SizedBox(height: 10,),
                 SizedBox(height: 50),
                 Center(

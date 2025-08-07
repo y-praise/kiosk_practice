@@ -14,10 +14,10 @@ class CarSelectionPage2 extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State createState() => SelectionPageState();
+  State createState() => SelectionPage2State();
 }
 
-class SelectionPageState extends State<CarSelectionPage2> {
+class SelectionPage2State extends State<CarSelectionPage2> {
   List<String?> selectedOption = ['', '', ''];
 
   Widget _radioButton(String text, String option1, String option2, int n) {
@@ -60,20 +60,20 @@ class SelectionPageState extends State<CarSelectionPage2> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Center(
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              '개인정보 보호를 위해 아래의 등본 사항 중 필요한 사항을 선택하신 후 확인 버튼을 누르십시오.',
-              style: TextStyle(fontSize: 30),
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                '개인정보 보호를 위해 아래의 등본 사항 중 필요한 사항을 선택하신 후 확인 버튼을 누르십시오.',
+                style: TextStyle(fontSize: 30),
+              ),
             ),
           ),
-        ),
-        Expanded(
-          child: Container(
+          Container(
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
@@ -92,31 +92,29 @@ class SelectionPageState extends State<CarSelectionPage2> {
                     Container(width: 100, child: TextField()),
                   ],
                 ),
-                Spacer(),
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      height: 50,
-                      alignment: Alignment.bottomRight,
-                      child: buttonWidget(
-                        context,
-                        () => widget.switchPageCallback(
-                          CirculationPage2(
-                            switchPageCallback: widget.switchPageCallback,
-                            page_num: widget.page_num,
-                          ),
-                          99.0,
+                SizedBox(height: 50,),
+                Center(
+                  child: Container(
+                    height: 50,
+                    alignment: Alignment.bottomRight,
+                    child: buttonWidget(
+                      context,
+                      () => widget.switchPageCallback(
+                        CarCirculationPage(
+                          switchPageCallback: widget.switchPageCallback,
+                          page_num: widget.page_num,
                         ),
-                        '확인',
+                        99.0,
                       ),
+                      '확인',
                     ),
                   ),
                 ),
               ],
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

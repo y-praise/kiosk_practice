@@ -105,7 +105,7 @@ class SelectionPageState extends State<HealthSelectionPage> {
                     ),
                   ],
                 ),
-                _radioButton('주민등록번호 공개여부', '공개', '비공개', 0),
+                _radioButton('주민등록번호\n공개여부', '공개', '비공개', 0),
                 Spacer(),
                 Expanded(
                   child: Center(

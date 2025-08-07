@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import '../widgets.dart';
 import '../common_pages/print_confirm.dart';
 
-class CirculationPage2 extends StatefulWidget {
+class CarCirculationPage extends StatefulWidget {
   final Function(Widget, double)
   switchPageCallback; // switchPageCallback을 생성자로 받음
   final double page_num;
 
-  const CirculationPage2({
+  const CarCirculationPage({
     Key? key,
     required this.switchPageCallback,
     required this.page_num,
@@ -16,7 +16,7 @@ class CirculationPage2 extends StatefulWidget {
   State createState() => CirculationPageState();
 }
 
-class CirculationPageState extends State<CirculationPage2> {
+class CirculationPageState extends State<CarCirculationPage> {
   int circulation = 1;
   late String page_name;
 

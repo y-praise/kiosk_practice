@@ -14,10 +14,10 @@ class PassportSelectionPage3 extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State createState() => SelectionPageState();
+  State createState() => SelectionPage3State();
 }
 
-class SelectionPageState extends State<PassportSelectionPage3> {
+class SelectionPage3State extends State<PassportSelectionPage3> {
   List<String> relationship = ['본인','배우자','부모','사위, 자부','손사위, 손자부','손이하','시부모','시조부모이상','자','조부모이상','처부모','처조부모','형제자매',];
   List<String> purpose = ['법원 제출용', '교육기관 제출용', '공공기관 제출용', '부동산 계약', '금융·병원 제출용', '기타'];
   String? selectedItem = '';

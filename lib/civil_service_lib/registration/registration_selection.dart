@@ -24,38 +24,36 @@ class SelectionPageState extends State<SelectionPage> {
   }
 
   Widget _checkList(String value, int num) {
-    return Expanded(
-      child: Row(
-        children: [
-          Text(value),
-          Spacer(),
-          Checkbox(
-            value: isChecked[num],
-            onChanged: (bool? newValue) {
-              _onCheckboxChanged(num, newValue);
-            },
-          ),
-        ],
-      ),
+    return Row(
+      children: [
+        Text(value),
+        Spacer(),
+        Checkbox(
+          value: isChecked[num],
+          onChanged: (bool? newValue) {
+            _onCheckboxChanged(num, newValue);
+          },
+        ),
+      ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Center(
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              '개인정보 보호를 위해 아래의 등본 사항 중 필요한 사항을 선택하신 후 확인 버튼을 누르십시오.',
-              style: TextStyle(fontSize: 30),
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                '개인정보 보호를 위해 아래의 등본 사항 중 필요한 사항을 선택하신 후 확인 버튼을 누르십시오.',
+                style: TextStyle(fontSize: 30),
+              ),
             ),
           ),
-        ),
-        Expanded(
-          child: Container(
+          Container(
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
@@ -69,36 +67,34 @@ class SelectionPageState extends State<SelectionPage> {
                 _checkList('3. 세대 구성 일자', 2),
                 _checkList('4. 발생일/신고일', 3),
                 _checkList('5. 변동 사유', 4),
-                _checkList('6. 교부 대상자 외 세대주, 세대원, 외국인 등의 이름', 5),
+                _checkList('6. 교부 대상자 외 \n세대주, 세대원, 외국인 등의 이름', 5),
                 _checkList('7. 주민등록번호 뒷자리', 6),
                 _checkList('8. 세대원의 세대주와의 관계', 7),
                 _checkList('9. 동거인', 8),
-
+                
                 SizedBox(height: 50),
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      height: 50,
-                      alignment: Alignment.bottomRight,
-                      child: buttonWidget(
-                        context,
-                        () => widget.switchPageCallback(
-                          CirculationPage(
-                            switchPageCallback: widget.switchPageCallback,
-                            page_num: widget.page_num,
-                          ), 
-                          99.0
-                        ),
-                        '확인',
+                Center(
+                  child: Container(
+                    height: 50,
+                    alignment: Alignment.bottomRight,
+                    child: buttonWidget(
+                      context,
+                      () => widget.switchPageCallback(
+                        CirculationPage(
+                          switchPageCallback: widget.switchPageCallback,
+                          page_num: widget.page_num,
+                        ), 
+                        99.0
                       ),
+                      '확인',
                     ),
                   ),
                 ),
               ],
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -96,7 +96,7 @@ class SelectionPageState extends State<TrafficSelectionPage> {
                 ),
                 Row(
                   children: [
-                    Text('제출할 기관(사용목적)'),
+                    Text('제출할 기관\n(사용목적)'),
                     Spacer(),
                     Container(width: 100, child: TextField()),
                   ],

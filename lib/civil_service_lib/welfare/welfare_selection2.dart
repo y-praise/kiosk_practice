@@ -14,10 +14,10 @@ class WelfareSelectionPage2 extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State createState() => SelectionPageState();
+  State createState() => SelectionPage2State();
 }
 
-class SelectionPageState extends State<WelfareSelectionPage2> {
+class SelectionPage2State extends State<WelfareSelectionPage2> {
   List<String?> selectedOption = ['', '', '', ''];
 
   Widget _radioButton(String text, String option1, String option2, int n) {
@@ -82,10 +82,10 @@ class SelectionPageState extends State<WelfareSelectionPage2> {
             margin: EdgeInsets.all(5),
             child: Column(
               children: [
-                _radioButton('주민등록번호 뒷자리 출력 여부', '예', '아니오', 0),
-                _radioButton('주장애유형정도 출력 여부', '예', '아니오', 1),
-                _radioButton('부장애유형정도 출력 여부', '예', '아니오', 2),
-                _radioButton('종합장애정도 출력 여부', '예', '아니오', 3),
+                _radioButton('주민등록번호 뒷자리\n출력 여부', '예', '아니오', 0),
+                _radioButton('주장애유형정도\n출력 여부', '예', '아니오', 1),
+                _radioButton('부장애유형정도\n출력 여부', '예', '아니오', 2),
+                _radioButton('종합장애정도\n출력 여부', '예', '아니오', 3),
                 Spacer(),
                 Expanded(
                   child: Center(

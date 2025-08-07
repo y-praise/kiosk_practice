@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'health_circulation.dart';
-import 'health_selection3.dart';
+import 'health_selection2.dart';
 import 'health_selection.dart';
 import '../widgets.dart';
 
@@ -27,7 +27,7 @@ class HealthAnnouncement extends StatelessWidget {
         page_num: page_num,
       );
     } else {
-      return HealthSelectionPage3(
+      return HealthSelectionPage2(
         switchPageCallback: switchPageCallback,
         page_num: page_num,
       );
