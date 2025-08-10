@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'ticket.dart';
+import './first_screen.dart';
+import './ticket.dart';
 
 class Seat extends StatefulWidget {
   const Seat({super.key});
@@ -26,8 +27,23 @@ class _SeatState extends State<Seat> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('좌석선택'), backgroundColor: Colors.indigo),
+      appBar: AppBar(
+        title: const Text('좌석선택'),
+        backgroundColor: Colors.indigo,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.help_outline, size: 28, color: Colors.black),
+            // 버튼 클릭 시 _showHelpOverlay 상태를 토글
+            onPressed: () {
+              setState(() {
+                qvisible = !qvisible;
+              });
+            },
+          ),
+        ],
+      ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Column(
             children: <Widget>[
@@ -3299,17 +3315,20 @@ class _SeatState extends State<Seat> {
               ),
             ],
           ),
-          Container(
-            width: 430,
-            margin: EdgeInsets.only(top: 30, left: 0),
-            padding: EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              color: Colors.grey,
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            child: Text(
-              '맨 오른쪽 버튼으로 선택가능한 좌석을 찾아 누른 후 탑승권 출력 버튼을 눌러주세요',
-              style: TextStyle(fontSize: 18.0, color: Colors.white),
+          Visibility(
+            visible: qvisible,
+            child: Container(
+              width: 430,
+              margin: EdgeInsets.only(top: 30, left: 0),
+              padding: EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Text(
+                '맨 오른쪽 버튼으로 선택가능한 좌석을 찾아 누른 후 탑승권 출력 버튼을 눌러주세요',
+                style: TextStyle(fontSize: 18.0, color: Colors.white),
+              ),
             ),
           ),
         ],

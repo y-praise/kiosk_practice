@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'flight.dart';
-import 'seat.dart';
+import './flight.dart';
+import './first_screen.dart';
+import './seat.dart';
 
 class Information extends StatefulWidget {
   const Information({super.key});
@@ -16,12 +17,23 @@ class _InformationState extends State<Information> {
       appBar: AppBar(
         title: const Text('탑승객 정보'),
         backgroundColor: Colors.indigo,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.help_outline, size: 28, color: Colors.black),
+            // 버튼 클릭 시 _showHelpOverlay 상태를 토글
+            onPressed: () {
+              setState(() {
+                qvisible = !qvisible;
+              });
+            },
+          ),
+        ],
       ),
       body: Stack(
         children: [
           Positioned(
             top: 0,
-            left: -85,
+            left: 0,
             child: Image.asset(
               "assets/images/flight2.png",
               fit: BoxFit.fitWidth,
@@ -142,15 +154,18 @@ class _InformationState extends State<Information> {
             width: 330,
             top: 350,
             left: 60,
-            child: Container(
-              padding: EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              child: Text(
-                '출발지와 도착지를 확인하고 좌석선택 버튼을 눌러주세요',
-                style: TextStyle(fontSize: 18.0, color: Colors.white),
+            child: Visibility(
+              visible: qvisible,
+              child: Container(
+                padding: EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: Text(
+                  '출발지와 도착지를 확인하고 좌석선택 버튼을 눌러주세요',
+                  style: TextStyle(fontSize: 18.0, color: Colors.white),
+                ),
               ),
             ),
           ),
