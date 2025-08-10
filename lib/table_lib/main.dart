@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'screens/kiosk_screen.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class TableMain extends StatelessWidget {
+  const TableMain({super.key});
 
   @override
   Widget build(BuildContext context) {
