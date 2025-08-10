@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'car/car_pages.dart';
 import 'common_pages/common_pages.dart';
 import 'employment/employment_pages.dart';
@@ -22,6 +23,7 @@ class CivilServiceMachine extends StatefulWidget {
 }
 
 class CivilServiceMachineState extends State<CivilServiceMachine> {
+  final FlutterTts _flutterTts = FlutterTts();
   late Widget _page;
   double page_number = 0.0;
   late String instruction;
@@ -34,6 +36,24 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
   void initState() {
     super.initState();
     _page = MainPage(switchPageCallback: _switch_page);
+    _initializeTts();
+    _speak('안내메시지를 보려면 오른쪽 위의 물음표 버튼을 눌러보세요');
+  }
+
+  @override
+  void dispose() {
+    _flutterTts.stop();
+    super.dispose();
+  }
+
+  void _initializeTts() async {
+    await _flutterTts.setLanguage("ko-KR");
+    await _flutterTts.setSpeechRate(0.5);
+  }
+
+  Future<void> _speak(String text) async {
+    await _flutterTts.stop();
+    await _flutterTts.speak(text);
   }
 
   void _switch_page(Widget newPage, double new_page_num) {
@@ -271,6 +291,7 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
             onPressed: () {
               setState(() {
                 _showHelpOverlay = !_showHelpOverlay;
+                if (_showHelpOverlay == true) _speak('안내메시지 켜짐');
               });
             },
           ),
