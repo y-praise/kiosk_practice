@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 //import 'screens/kiosk_screen.dart'; // 우리가 만든 KioskScreen을 가져옵니다.
-import 'first_screen.dart';
+import './first_screen.dart';
+
+void main() {
+  // 앱을 실행하는 메인 함수
+  runApp(const MyApp());
+}
+
+bool qvisible = false;
 
 // MyApp 클래스: 앱의 최상위 위젯
-class AirportMain extends StatelessWidget {
-  const AirportMain({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
