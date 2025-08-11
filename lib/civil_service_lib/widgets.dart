@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'car/car_pages.dart';
 import 'common_pages/common_pages.dart';
 import 'employment/employment_pages.dart';
@@ -121,6 +122,16 @@ Widget buttonWidget(
 }
 
 Widget buildHelpBubble({required String text, double? top, double? bottom, double? right, double? left}) {
+  final FlutterTts flutterTts = FlutterTts();
+
+  Future<void> _speak() async {
+    await flutterTts.setLanguage("ko-KR");
+    await flutterTts.setPitch(1.0);
+    await flutterTts.speak(text.replaceAll('\n', ' '));
+  }
+
+  _speak();
+
   return Positioned(
     top: top,
     bottom: bottom,

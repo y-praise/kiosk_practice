@@ -291,7 +291,6 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
             onPressed: () {
               setState(() {
                 _showHelpOverlay = !_showHelpOverlay;
-                if (_showHelpOverlay == true) _speak('안내메시지 켜짐');
               });
             },
           ),
@@ -430,7 +429,7 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
                                             '현재금액',
                                             style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 10,
+                                              fontSize: 12,
                                             ),
                                           ),
                                         ],
@@ -448,7 +447,7 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
                                               '반환버튼',
                                               style: TextStyle(
                                                 color: Colors.white,
-                                                fontSize: 10,
+                                                fontSize: 12,
                                               ),
                                             ),
                                           ),
@@ -470,7 +469,7 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
                                               '지폐 넣는 곳',
                                               style: TextStyle(
                                                 color: Colors.white,
-                                                fontSize: 10,
+                                                fontSize: 12,
                                               ),
                                             ),
                                           ),
@@ -511,10 +510,10 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
                                           margin: EdgeInsets.all(5),
                                           padding: EdgeInsets.all(3),
                                           child: Text(
-                                            '동전 \n넣는 곳',
+                                            '동전 넣는 곳',
                                             style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 10,
+                                              fontSize: 12,
                                             ),
                                             textAlign: TextAlign.center,
                                           ),
@@ -543,7 +542,7 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
                                               '지문인식기',
                                               style: TextStyle(
                                                 color: Colors.white,
-                                                fontSize: 10,
+                                                fontSize: 12,
                                               ),
                                             ),
                                           ),
