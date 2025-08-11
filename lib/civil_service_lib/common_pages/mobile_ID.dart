@@ -47,7 +47,7 @@ class MobileIdPageState extends State<MobileIdPage> {
                     child: Container(
                       height: 160,
                       child: Image.asset(
-                        'assets/images/j-dragon.png',
+                        'assets/images/fringerprint_help_image.png',
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -57,7 +57,7 @@ class MobileIdPageState extends State<MobileIdPage> {
                     child: Container(
                       height: 160,
                       child: Image.asset(
-                        'assets/images/j-dragon.png',
+                        'assets/images/fingerprint_help_image2.png',
                         fit: BoxFit.fill,
                       ),
                     ),
