@@ -43,9 +43,9 @@ class MobileIdPageState extends State<MobileIdPage> {
               child: Row(
                 children: [
                   Expanded(
-                    flex: 2,
+                    flex: 5,
                     child: Container(
-                      height: 160,
+                      height: 250,
                       child: Image.asset(
                         'assets/images/fringerprint_help_image.png',
                         fit: BoxFit.fill,
@@ -55,19 +55,9 @@ class MobileIdPageState extends State<MobileIdPage> {
                   Expanded(
                     flex: 5,
                     child: Container(
-                      height: 160,
+                      height: 250,
                       child: Image.asset(
                         'assets/images/fingerprint_help_image2.png',
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Container(
-                      height: 160,
-                      child: Image.asset(
-                        'assets/images/j-dragon.png',
                         fit: BoxFit.fill,
                       ),
                     ),
