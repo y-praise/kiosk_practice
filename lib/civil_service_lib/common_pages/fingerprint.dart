@@ -42,12 +42,18 @@ class FingerprintPageState extends State<FingerprintPage> {
               padding: EdgeInsets.all(20),
               child: Row(
                 children: [
+                  
                   Expanded(
-                    flex: 2,
+                    flex: 5,
                     child: Container(
-                      height: 160,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.red
+                        )
+                      ),
+                      height: 250,
                       child: Image.asset(
-                        'assets/images/j-dragon.png',
+                        'assets/images/fingerprint_help_image.png',
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -55,19 +61,14 @@ class FingerprintPageState extends State<FingerprintPage> {
                   Expanded(
                     flex: 5,
                     child: Container(
-                      height: 160,
-                      child: Image.asset(
-                        'assets/images/j-dragon.png',
-                        fit: BoxFit.fill,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.red
+                        )
                       ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Container(
-                      height: 160,
+                      height: 250,
                       child: Image.asset(
-                        'assets/images/j-dragon.png',
+                        'assets/images/fingerprint_help_image2.png',
                         fit: BoxFit.fill,
                       ),
                     ),
