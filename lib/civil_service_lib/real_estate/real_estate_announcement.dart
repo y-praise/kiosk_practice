@@ -44,22 +44,20 @@ class RealEstateAnnouncement extends StatelessWidget {
                 children: [
                   FittedBox(
                     fit: BoxFit.scaleDown,
-                    child: Text('발급 시 선택사항에 대해'),
+                    child: Text('부동산 등기부등본 발급 안내입니다.'),
                   ),
+                  SizedBox(height: 20),
                   FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Text(
-                      '법원, 교육기관, 공공기관, 부동산계약, 금융·병원 제출용',
+                      '부동산의 권리관계 및 현황을 확인할 수 있는\n등기부등본을 발급받으실 수 있습니다.',
                       style: TextStyle(color: Colors.blue),
                     ),
                   ),
+                  SizedBox(height: 20),
                   FittedBox(
                     fit: BoxFit.scaleDown,
-                    child: Text('5가지 선택사항으로 발급을 도와 드리겠습니다.'),
-                  ),
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text('계속 진행하시려면 확인을 눌러 주십시오'),
+                    child: Text('계속 진행하시려면 \'확인\' 버튼을 눌러주세요.'),
                   ),
                   SizedBox(height: 50),
                   Container(

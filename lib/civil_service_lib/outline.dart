@@ -279,6 +279,35 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
     );
   }
 
+  Widget phone() {
+    return Positioned(
+      bottom: 200,
+      left: 250,
+      child: Container(
+        width: 100,
+        height: 200,
+        padding: EdgeInsets.fromLTRB(7, 10, 7, 15),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.black,
+        ),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(0),
+            ),
+            padding: EdgeInsets.all(0)
+          ),
+          onPressed: () {
+            _vertification();
+          },
+          child: Text('휴대폰\n인증하기', style: TextStyle(fontSize: 17),),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -291,7 +320,6 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
             onPressed: () {
               setState(() {
                 _showHelpOverlay = !_showHelpOverlay;
-                if (_showHelpOverlay == true) _speak('안내메시지 켜짐');
               });
             },
           ),
@@ -430,7 +458,7 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
                                             '현재금액',
                                             style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 10,
+                                              fontSize: 12,
                                             ),
                                           ),
                                         ],
@@ -448,7 +476,7 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
                                               '반환버튼',
                                               style: TextStyle(
                                                 color: Colors.white,
-                                                fontSize: 10,
+                                                fontSize: 12,
                                               ),
                                             ),
                                           ),
@@ -470,7 +498,7 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
                                               '지폐 넣는 곳',
                                               style: TextStyle(
                                                 color: Colors.white,
-                                                fontSize: 10,
+                                                fontSize: 12,
                                               ),
                                             ),
                                           ),
@@ -511,10 +539,10 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
                                           margin: EdgeInsets.all(5),
                                           padding: EdgeInsets.all(3),
                                           child: Text(
-                                            '동전 \n넣는 곳',
+                                            '동전 넣는 곳',
                                             style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 10,
+                                              fontSize: 12,
                                             ),
                                             textAlign: TextAlign.center,
                                           ),
@@ -543,7 +571,7 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
                                               '지문인식기',
                                               style: TextStyle(
                                                 color: Colors.white,
-                                                fontSize: 10,
+                                                fontSize: 12,
                                               ),
                                             ),
                                           ),
@@ -618,6 +646,7 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
               ),
             ],
           ),
+          if (_page.runtimeType == MobileIdPage) phone(),
           if (_showHelpOverlay) showHelpBubble(page: _page),
           if (isPrinted) paper(),
         ],

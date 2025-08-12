@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'car/car_pages.dart';
 import 'common_pages/common_pages.dart';
 import 'employment/employment_pages.dart';
@@ -95,11 +96,7 @@ extension SizeExtension on num {
 }
 
 
-Widget buttonWidget(
-  BuildContext context,
-  VoidCallback onPressedCallback,
-  String text,
-) {
+Widget buttonWidget(BuildContext context, VoidCallback onPressedCallback, String text,) {
   return Expanded(
     child: ElevatedButton(
       onPressed: onPressedCallback,
@@ -121,6 +118,16 @@ Widget buttonWidget(
 }
 
 Widget buildHelpBubble({required String text, double? top, double? bottom, double? right, double? left}) {
+  final FlutterTts flutterTts = FlutterTts();
+
+  Future<void> _speak() async {
+    await flutterTts.setLanguage("ko-KR");
+    await flutterTts.setPitch(1.0);
+    await flutterTts.speak(text.replaceAll('\n', ' '));
+  }
+
+  _speak();
+
   return Positioned(
     top: top,
     bottom: bottom,
@@ -152,7 +159,7 @@ Widget showHelpBubble({Widget? page}) {
         buildHelpBubble(text: '\'처음화면\' 버튼을 눌러\n처음 화면으로 돌아가세요', top: 320.h, right: 45),
         buildHelpBubble(text: '아래에 출력된 증명서를 눌러 보세요', top: 660.h, right: 15),],);
   } else if (page.runtimeType == MobileIdPage) {
-    return buildHelpBubble(text: '오른쪽의 지문인식기 버튼을 \n눌러보세요', top: 500.h);
+    return buildHelpBubble(text: '오른쪽의 휴대폰을 \n눌러보세요', top: 500.h, right: 50);
   } else if (page.runtimeType == NotExistPage) {
     return buildHelpBubble(text: '\'처음화면\' 버튼을 눌러보세요', top: 300.h);
   } else if (page.runtimeType == PrintConfirm) {
@@ -222,7 +229,7 @@ Widget showHelpBubble({Widget? page}) {
   } else if (page.runtimeType == MilitaryCirculationPage) {
     return buildHelpBubble(text: '몇장을 출력할 지 선택 후\n\'확인\' 버튼을 눌러보세요', top: 340.h, right: 10);
   } else if (page.runtimeType == MilitarySelectionPage) {
-    return buildHelpBubble(text: '필요한 사항을 선택한 후\n확인을 눌러보세요', top: 420.h, right: 50);
+    return buildHelpBubble(text: '화면을 내리며 필요한 사항을 선택한 후\n확인을 눌러보세요', top: 420.h, right: 50);
   }
   else if (page.runtimeType == RealEstateAnnouncement) {      //real_estate help comments
     return buildHelpBubble(text: '안내사항 확인 후\n\'확인\' 버튼을 눌러보세요', top: 340.h, right: 50);

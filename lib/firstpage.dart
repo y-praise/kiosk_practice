@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Firstpage extends StatelessWidget {
   @override
@@ -24,7 +25,13 @@ class Firstpage extends StatelessWidget {
           ),
           SizedBox(height: 50,),
           ElevatedButton(
-            onPressed: () {Navigator.pushNamed(context, '/table');}, 
+            onPressed: () {
+              SystemChrome.setPreferredOrientations([
+                DeviceOrientation.landscapeLeft,
+                DeviceOrientation.landscapeRight,
+              ]);
+              Navigator.pushNamed(context, '/table');
+            }, 
             child: Text('테이블 키오스크')
           ),
         ],

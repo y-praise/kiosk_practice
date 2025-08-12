@@ -158,7 +158,7 @@ class MainPage extends StatelessWidget {
                         EmploymentMainPage(switchPageCallback: switchPageCallback),
                         11.0
                       ),
-                      '고용,산재보험(근로복지공단)',
+                      '고용,산재보험\n(근로복지공단)',
                     ),
                     SizedBox(width: 10),
                     buttonWidget(

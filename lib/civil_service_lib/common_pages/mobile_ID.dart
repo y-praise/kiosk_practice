@@ -43,11 +43,16 @@ class MobileIdPageState extends State<MobileIdPage> {
               child: Row(
                 children: [
                   Expanded(
-                    flex: 2,
+                    flex: 5,
                     child: Container(
-                      height: 160,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.red
+                        )
+                      ),
+                      height: 220,
                       child: Image.asset(
-                        'assets/images/j-dragon.png',
+                        'assets/images/mobileID.png',
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -55,19 +60,14 @@ class MobileIdPageState extends State<MobileIdPage> {
                   Expanded(
                     flex: 5,
                     child: Container(
-                      height: 160,
-                      child: Image.asset(
-                        'assets/images/j-dragon.png',
-                        fit: BoxFit.fill,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.red
+                        )
                       ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Container(
-                      height: 160,
+                      height: 220,
                       child: Image.asset(
-                        'assets/images/j-dragon.png',
+                        'assets/images/mobileID2.png',
                         fit: BoxFit.fill,
                       ),
                     ),

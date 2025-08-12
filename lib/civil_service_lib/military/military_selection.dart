@@ -97,8 +97,8 @@ class SelectionPageState extends State<MilitarySelectionPage> {
                 ),
                 _radioButton(
                   '군(대체) 복무 상태',
-                  '복무를 마친 사람',
-                  '복무를 마치지 않은 사람\n(최근 1개월 이내 전역자 포함)',
+                  '복무 종료',
+                  '복무 미종료\n(최근 1개월 이내\n전역자 포함)',
                   0,
                 ),
                 _radioButton('언어구분', '국문', '영문', 1),
