@@ -279,6 +279,35 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
     );
   }
 
+  Widget phone() {
+    return Positioned(
+      bottom: 200,
+      left: 250,
+      child: Container(
+        width: 100,
+        height: 200,
+        padding: EdgeInsets.fromLTRB(7, 10, 7, 15),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.black,
+        ),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(0),
+            ),
+            padding: EdgeInsets.all(0)
+          ),
+          onPressed: () {
+            _vertification();
+          },
+          child: Text('휴대폰\n인증하기', style: TextStyle(fontSize: 17),),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -617,6 +646,7 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
               ),
             ],
           ),
+          if (_page.runtimeType == MobileIdPage) phone(),
           if (_showHelpOverlay) showHelpBubble(page: _page),
           if (isPrinted) paper(),
         ],

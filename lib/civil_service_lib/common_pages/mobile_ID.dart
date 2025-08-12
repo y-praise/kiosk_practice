@@ -45,9 +45,14 @@ class MobileIdPageState extends State<MobileIdPage> {
                   Expanded(
                     flex: 5,
                     child: Container(
-                      height: 250,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.red
+                        )
+                      ),
+                      height: 220,
                       child: Image.asset(
-                        'assets/images/fringerprint_help_image.png',
+                        'assets/images/mobileID.png',
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -55,9 +60,14 @@ class MobileIdPageState extends State<MobileIdPage> {
                   Expanded(
                     flex: 5,
                     child: Container(
-                      height: 250,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.red
+                        )
+                      ),
+                      height: 220,
                       child: Image.asset(
-                        'assets/images/fingerprint_help_image2.png',
+                        'assets/images/mobileID2.png',
                         fit: BoxFit.fill,
                       ),
                     ),
