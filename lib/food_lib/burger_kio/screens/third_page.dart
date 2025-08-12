@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'fourth_page.dart';
 import '../utils.dart'; // 이 파일은 수정되지 않음
+import 'package:flutter_tts/flutter_tts.dart'; // TTS 기능을 위한 패키지 임포트
 
 class ThirdPage extends StatefulWidget {
   const ThirdPage({super.key});
@@ -11,6 +12,8 @@ class ThirdPage extends StatefulWidget {
 }
 
 class _ThirdPageState extends State<ThirdPage> {
+  // TTS 인스턴스를 관리하는 변수
+  late FlutterTts flutterTts;
   // State variable to control the visibility of the help bubbles
   bool _showHelpBubbles = false;
 
@@ -77,6 +80,32 @@ class _ThirdPageState extends State<ThirdPage> {
       {'name': '과일 주스', 'price': 2500, 'imageUrl': 'assets/images/fruit.png'},
     ],
   };
+
+  // TTS 초기화 및 설정
+  @override
+  void initState() {
+    super.initState();
+    flutterTts = FlutterTts();
+    _initTts();
+  }
+
+  // TTS 설정 함수
+  Future<void> _initTts() async {
+    await flutterTts.setLanguage("ko-KR");
+    await flutterTts.setSpeechRate(0.5);
+  }
+
+  // 텍스트를 음성으로 변환하여 말하는 함수
+  Future<void> _speak(String text) async {
+    await flutterTts.speak(text);
+  }
+
+  // 위젯이 종료될 때 TTS 리소스를 해제
+  @override
+  void dispose() {
+    flutterTts.stop();
+    super.dispose();
+  }
 
   bool _isSetSelected(List<Map<String, dynamic>> options, int? selectedIndex) {
     if (selectedIndex == null || selectedIndex < 0 || selectedIndex >= options.length) return false;
@@ -264,16 +293,16 @@ class _ThirdPageState extends State<ThirdPage> {
                         Expanded(
                           child: ElevatedButton(
                             onPressed: _selectedOptionIndex != null &&
-                                    (!_isSetSelected(options, _selectedOptionIndex) || _selectedDrink != null)
+                                (!(_isSetSelected(options, _selectedOptionIndex)) || _selectedDrink != null)
                                 ? () {
-                                    Navigator.pop(context, {
-                                      'optionName': options[_selectedOptionIndex]['optionName'],
-                                      'finalPrice': currentCalculatedPrice,
-                                      'removePickle': _removePickle,
-                                      'removeOnion': _removeOnion,
-                                      'selectedDrink': _selectedDrink,
-                                    });
-                                  }
+                              Navigator.pop(context, {
+                                'optionName': options[_selectedOptionIndex]['optionName'],
+                                'finalPrice': currentCalculatedPrice,
+                                'removePickle': _removePickle,
+                                'removeOnion': _removeOnion,
+                                'selectedDrink': _selectedDrink,
+                              });
+                            }
                                 : null,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.red,
@@ -467,7 +496,7 @@ class _ThirdPageState extends State<ThirdPage> {
     if (_selectedCategory == '버거' && menuData.containsKey('options')) {
       final List<Map<String, dynamic>> options = List<Map<String, dynamic>>.from(menuData['options']);
       final Map<String, dynamic>? selectedConfig =
-          await _showBurgerCustomizationDialogAdjusted(context, bodyWidth, menuItemName, options);
+      await _showBurgerCustomizationDialogAdjusted(context, bodyWidth, menuItemName, options);
 
       if (selectedConfig != null) {
         String finalItemName = selectedConfig['optionName'];
@@ -559,6 +588,14 @@ class _ThirdPageState extends State<ThirdPage> {
               setState(() {
                 _showHelpBubbles = !_showHelpBubbles;
               });
+              // 도움말 말풍선이 나타날 때 TTS를 실행합니다.
+              if (_showHelpBubbles) {
+                String helpText = '음식 종류를 선택하세요. 종류를 고르셨다면 음식을 선택하세요. 선택한 음식들이 이곳에 보여집니다. x를 누르면 주문을 취소할 수 있습니다';
+                _speak(helpText);
+              } else {
+                // 말풍선이 사라지면 TTS를 중지합니다.
+                flutterTts.stop();
+              }
             },
           ),
         ],
