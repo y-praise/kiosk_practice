@@ -1,5 +1,6 @@
 // lib/screens/kiosk_screen.dart
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../data/mock_data.dart';
 import '../models/cart.dart';
 import '../theme/colors.dart';
@@ -50,6 +51,15 @@ class _OrderScreenState extends State<OrderScreen> {
   void initState() {
     super.initState();
     _updateDisplayedProducts(); // 앱 시작 시 전체 메뉴를 보여줍니다.
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    super.dispose();
   }
 
   // --- 로직 함수 ---
