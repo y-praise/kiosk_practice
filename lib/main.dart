@@ -8,14 +8,13 @@ import 'civil_service_lib/main.dart';
 import 'airport_lib/main.dart';
 import 'table_lib/main.dart';
 
-// TODO: 여기에 본인의 Google Cloud Platform API 키를 입력하세요.
-const String kGoogleApiKey = "AIzaSyDoeEdjOW6iBCK7EaK6NU-UOG3NzdHj4gA";
+const String kGoogleApiKey = "YOUR_API_KEY";    //여기에 본인의 Google Cloud Platform API 키를 입력하세요.
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await FlutterNaverMap().init(
-      clientId: 'ak8fx9v4ih',
+      clientId: 'YOUR_CLIENT_ID',   //여기에 본인의 Naver Map API 키를 입력하세요.
       onAuthFailed: (ex) {
         switch (ex) {
           case NQuotaExceededException(:final message):
