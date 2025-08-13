@@ -1,6 +1,7 @@
 // lib/screens/fifth_page.dart
 import 'package:flutter/material.dart';
 import '../utils.dart'; // SizeConfig 임포트 (w, h, sp 사용을 위해 필요)
+import 'package:flutter_tts/flutter_tts.dart'; // flutter_tts 패키지 임포트
 
 // StatefulWidget으로 변경하여 상태 관리가 가능하도록 합니다.
 class FifthPage extends StatefulWidget {
@@ -16,8 +17,38 @@ class FifthPage extends StatefulWidget {
 }
 
 class _FifthPageState extends State<FifthPage> {
+  // TTS 인스턴스를 관리하는 변수
+  late FlutterTts flutterTts;
   // 도움말 오버레이의 표시 여부를 관리하는 상태 변수
   bool _showHelpOverlay = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // TTS 인스턴스 초기화
+    flutterTts = FlutterTts();
+    _initTts();
+  }
+
+  // TTS 설정 및 초기화 함수
+  Future<void> _initTts() async {
+    // 언어를 한국어로 설정합니다.
+    await flutterTts.setLanguage("ko-KR");
+    // TTS 속도를 조금 느리게 설정하여 더 잘 들리도록 합니다.
+    await flutterTts.setSpeechRate(0.5);
+  }
+
+  // 텍스트를 음성으로 변환하여 말하는 함수
+  Future<void> _speak(String text) async {
+    await flutterTts.speak(text);
+  }
+
+  // 위젯이 종료될 때 TTS 리소스를 해제하는 함수
+  @override
+  void dispose() {
+    flutterTts.stop();
+    super.dispose();
+  }
 
   // 말풍선 위젯을 생성하는 헬퍼 함수
   Widget _buildHelpBubble({required String text, double? top, double? bottom}) {
@@ -50,10 +81,8 @@ class _FifthPageState extends State<FifthPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        // AppBar가 보이도록 toolbarHeight를 제거하고 배경색을 지정합니다.
         backgroundColor: Colors.white,
         elevation: 0,
-        // 우측 상단에 도움말 버튼 추가
         actions: [
           IconButton(
             icon: Icon(Icons.help_outline, size: 28.w, color: Colors.black),
@@ -62,6 +91,13 @@ class _FifthPageState extends State<FifthPage> {
               setState(() {
                 _showHelpOverlay = !_showHelpOverlay;
               });
+              // 도움말이 표시될 때만 TTS를 실행합니다.
+              if (_showHelpOverlay) {
+                _speak('카드를 터치해 결제하세요');
+              } else {
+                // 도움말이 사라지면 TTS를 중지합니다.
+                flutterTts.stop();
+              }
             },
           ),
         ],

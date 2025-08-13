@@ -1,5 +1,6 @@
 // lib/screens/fourth_page.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart'; // flutter_tts 패키지 임포트
 import '../utils.dart'; // SizeConfig 임포트 (w, h, sp 사용을 위해 필요)
 
 class FourthPage extends StatefulWidget {
@@ -17,6 +18,8 @@ class FourthPage extends StatefulWidget {
 }
 
 class _FourthPageState extends State<FourthPage> {
+  // FlutterTts 인스턴스 생성
+  late FlutterTts flutterTts;
   late List<Map<String, dynamic>> _currentOrderList;
   late int _currentTotalAmount;
   // 도움말 오버레이의 표시 여부를 관리하는 상태 변수
@@ -25,10 +28,27 @@ class _FourthPageState extends State<FourthPage> {
   @override
   void initState() {
     super.initState();
+    // FlutterTts 초기화
+    flutterTts = FlutterTts();
+    // TTS 언어 설정 (한국어)
+    _setLanguage();
     _currentOrderList = List<Map<String, dynamic>>.from(
       widget.orderList.map((item) => Map<String, dynamic>.from(item))
     );
     _currentTotalAmount = widget.totalAmount;
+  }
+
+  // TTS 언어 설정 함수
+  Future<void> _setLanguage() async {
+    await flutterTts.setLanguage("ko-KR");
+  }
+
+  // TTS로 텍스트를 읽어주는 함수
+  Future<void> _speakHelpText(String text) async {
+    // 현재 말하고 있는 중이라면 중지
+    await flutterTts.stop();
+    // 텍스트 읽기 시작
+    await flutterTts.speak(text);
   }
 
   void _updateQuantity(int index, int delta) {
@@ -82,6 +102,13 @@ class _FourthPageState extends State<FourthPage> {
   }
 
   @override
+  void dispose() {
+    // 위젯이 사라질 때 TTS 리소스 해제
+    flutterTts.stop();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -103,6 +130,13 @@ class _FourthPageState extends State<FourthPage> {
             onPressed: () {
               setState(() {
                 _showHelpOverlay = !_showHelpOverlay;
+                if (_showHelpOverlay) {
+                  // 말풍선이 나타날 때 TTS 기능 호출
+                  _speakHelpText('더하기, 빼기 버튼으로 수량을 조절하고, 결제 버튼을 눌러 다음 단계로 넘어가세요.');
+                } else {
+                  // 말풍선이 사라질 때 TTS 중지
+                  flutterTts.stop();
+                }
               });
             },
           ),

@@ -1,5 +1,6 @@
 // lib/screens/second_page.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart'; // flutter_tts 패키지 임포트
 import '../utils.dart'; // SizeConfig 임포트
 import 'third_page.dart';
 
@@ -11,14 +12,52 @@ class SecondPage extends StatefulWidget {
 }
 
 class _SecondPageState extends State<SecondPage> {
+  // FlutterTts 인스턴스 생성
+  late FlutterTts flutterTts;
   // 도움말 말풍선의 표시 상태를 관리하는 변수
   bool _showHelpOverlay = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // FlutterTts 초기화
+    flutterTts = FlutterTts();
+    // TTS 언어 설정 (한국어)
+    _setLanguage();
+  }
+
+  // TTS 언어 설정 함수
+  Future<void> _setLanguage() async {
+    await flutterTts.setLanguage("ko-KR");
+  }
+
+  // TTS로 텍스트를 읽어주는 함수
+  Future<void> _speakHelpText(String text) async {
+    // 현재 말하고 있는 중이라면 중지
+    await flutterTts.stop();
+    // 텍스트 읽기 시작
+    await flutterTts.speak(text);
+  }
 
   // 도움말 버튼을 누를 때 호출되는 함수
   void _toggleHelpOverlay() {
     setState(() {
       _showHelpOverlay = !_showHelpOverlay;
+      if (_showHelpOverlay) {
+        // 말풍선이 나타날 때 TTS 기능 호출
+        _speakHelpText('식사 방법에 따라 버튼을 눌러주세요');
+      } else {
+        // 말풍선이 사라질 때 TTS 중지
+        flutterTts.stop();
+      }
     });
+  }
+
+  @override
+  void dispose() {
+    // 위젯이 사라질 때 TTS 리소스 해제
+    flutterTts.stop();
+    super.dispose();
   }
 
   @override

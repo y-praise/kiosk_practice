@@ -42,11 +42,11 @@ class FoodMain extends StatelessWidget {
             width: appWidth,
             height: appHeight,
             child: MaterialApp(
+              debugShowCheckedModeBanner: false,
               title: 'Kiosk App',
               theme: ThemeData(
                 primarySwatch: Colors.blue,
               ),
-              debugShowCheckedModeBanner: false,
               initialRoute: '/',
               routes: {
                 '/': (context) => const FirstPage(),
@@ -57,7 +57,7 @@ class FoodMain extends StatelessWidget {
                   final int totalAmountFromFourthPage = ModalRoute.of(context)!.settings.arguments as int? ?? 0;
                   return FifthPage(finalTotalAmount: totalAmountFromFourthPage);
                 },
-                '/sixth': (context) => const SixthPage(), // SixthPage 라우트 추가
+                '/sixth': (context) => const SixthPage(),
               },
             ),
           ),
