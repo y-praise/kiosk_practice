@@ -10,6 +10,10 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_tts: ^4.2.3
+  flutter_naver_map: ^1.4.1+1
+  geolocator: ^14.0.2
+  google_maps_webservice: ^0.0.20-nullsafety.5
+  http: 0.13.6
 
 dev_dependencies:
   flutter_test:

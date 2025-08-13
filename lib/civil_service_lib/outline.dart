@@ -36,26 +36,8 @@ class CivilServiceMachineState extends State<CivilServiceMachine> {
   void initState() {
     super.initState();
     _page = MainPage(switchPageCallback: _switch_page);
-    _initializeTts();
-    _speak('안내메시지를 보려면 오른쪽 위의 물음표 버튼을 눌러보세요');
   }
-
-  @override
-  void dispose() {
-    _flutterTts.stop();
-    super.dispose();
-  }
-
-  void _initializeTts() async {
-    await _flutterTts.setLanguage("ko-KR");
-    await _flutterTts.setSpeechRate(0.5);
-  }
-
-  Future<void> _speak(String text) async {
-    await _flutterTts.stop();
-    await _flutterTts.speak(text);
-  }
-
+  
   void _switch_page(Widget newPage, double new_page_num) {
     setState(() {
       _page = LoadingPage();
