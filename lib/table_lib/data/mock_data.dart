@@ -1,4 +1,4 @@
-import '../screens/kiosk_screen.dart';
+import '../models/product.dart';
 
 // 카테고리 목록 데이터
 final List<Map<String, dynamic>> mockCategories = [

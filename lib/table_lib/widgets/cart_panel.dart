@@ -4,6 +4,7 @@ import '../models/cart.dart';
 import '../theme/colors.dart';
 
 class CartPanel extends StatelessWidget {
+  final GlobalKey cartIconKey;
   final List<CartItem> cart;
   final Function(CartItem, int) onUpdateItem;
   final VoidCallback onClearCart;
@@ -11,6 +12,7 @@ class CartPanel extends StatelessWidget {
 
   const CartPanel({
     super.key,
+    required this.cartIconKey,
     required this.cart,
     required this.onUpdateItem,
     required this.onClearCart,
@@ -24,22 +26,34 @@ class CartPanel extends StatelessWidget {
 
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.only(top: 50.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 8.0,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  '장바구니 ($totalQuantity개)',
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: textColor,
-                  ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.shopping_cart,
+                      color: primaryColor,
+                      key: cartIconKey,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      '장바구니 ($totalQuantity개)',
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: textColor,
+                      ),
+                    ),
+                  ],
                 ),
                 TextButton.icon(
                   onPressed: cart.isEmpty ? null : onClearCart,
@@ -51,69 +65,67 @@ class CartPanel extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              child: cart.isEmpty
-                  ? const Center(
-                      key: ValueKey('empty'),
-                      child: Text(
-                        '장바구니가 비어있습니다.',
-                        style: TextStyle(color: subTextColor),
-                      ),
-                    )
-                  : ListView.builder(
-                      key: const ValueKey('list'),
-                      itemCount: cart.length,
-                      itemBuilder: (context, index) {
-                        final cartItem = cart[index];
-                        return ListTile(
-                          leading: ClipRRect(
-                            borderRadius: BorderRadius.circular(4.0),
-                            child: Image.asset(
-                              cartItem.product.imagePath,
-                              width: 40,
-                              height: 40,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          title: Text(
-                            cartItem.product.name,
-                            style: const TextStyle(fontSize: 14),
-                          ),
-                          subtitle: Text(
-                            '${cartItem.product.price}원',
-                            style: const TextStyle(color: subTextColor),
-                          ),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.remove_circle_outline,
-                                  color: Colors.grey,
-                                ),
-                                onPressed: () => onUpdateItem(cartItem, -1),
-                              ),
-                              Text(
-                                '${cartItem.quantity}',
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.add_circle_outline,
-                                  color: primaryColor,
-                                ),
-                                onPressed: () => onUpdateItem(cartItem, 1),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
+            child: cart.isEmpty
+                ? const Center(
+                    key: ValueKey('empty'),
+                    child: Text(
+                      '장바구니가 비어있습니다.',
+                      style: TextStyle(color: subTextColor),
                     ),
-            ),
+                  )
+                : ListView.builder(
+                    key: const ValueKey('list'),
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    itemCount: cart.length,
+                    itemBuilder: (context, index) {
+                      final cartItem = cart[index];
+                      return ListTile(
+                        leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(4.0),
+                          child: Image.asset(
+                            cartItem.product.imagePath,
+                            width: 40,
+                            height: 40,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        title: Text(
+                          cartItem.product.name,
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                        subtitle: Text(
+                          '${cartItem.product.price}원',
+                          style: const TextStyle(color: subTextColor),
+                        ),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(
+                                Icons.remove_circle_outline,
+                                color: Colors.grey,
+                              ),
+                              onPressed: () => onUpdateItem(cartItem, -1),
+                            ),
+                            Text(
+                              '${cartItem.quantity}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(
+                                Icons.add_circle_outline,
+                                color: primaryColor,
+                              ),
+                              onPressed: () => onUpdateItem(cartItem, 1),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
           ),
           Container(
             padding: const EdgeInsets.all(16.0),
@@ -128,7 +140,11 @@ class CartPanel extends StatelessWidget {
                   children: [
                     const Text(
                       '총 주문금액',
-                      style: TextStyle(fontSize: 18, color: subTextColor),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: textColor,
+                      ),
                     ),
                     Text(
                       '$totalPrice원',
