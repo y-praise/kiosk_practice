@@ -1,4 +1,3 @@
-// lib/screens/kiosk_screen.dart
 import 'package:flutter/material.dart';
 import '../data/mock_data.dart';
 import '../models/cart.dart';

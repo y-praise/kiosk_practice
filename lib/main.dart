@@ -44,7 +44,7 @@ class MainApp extends StatelessWidget {
         '/civil_service': (context) => CivilServiceMain(),
         '/food': (context) => FoodMain(),
         '/airport': (context) => AirportMain(),
-        '/table': (context)  => TableMain()
+        '/table': (context)  => const TableMain()
       },
     );
   }
@@ -176,12 +176,16 @@ class _NaverMapTestScreenState extends State<NaverMapScreen> {
               caption: NOverlayCaption(text: result.name),
               iconTintColor: Colors.blue,
             );
-            marker.setOnTapListener((_) {
-              SystemChrome.setPreferredOrientations([
+            marker.setOnTapListener((_) async {
+              await SystemChrome.setPreferredOrientations([
                 DeviceOrientation.landscapeLeft,
                 DeviceOrientation.landscapeRight,
               ]);
-              Navigator.pushNamed(context, '/table');
+              await Navigator.pushNamed(context, '/table');
+              SystemChrome.setPreferredOrientations([
+                DeviceOrientation.portraitUp,
+                DeviceOrientation.portraitDown,
+              ]);
             });
             _restaurantMarkers.add(marker);
           }
