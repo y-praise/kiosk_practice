@@ -41,9 +41,9 @@
 
 4. API key, Client ID 입력
 
-  Google Cloud API(https://cloud.google.com/apis)에서 Places API를 선택 후 key를 발급받아 lib/main.dart의 11번째 줄 YOUR_API_KEY에 입력
+  Google Cloud API(https://cloud.google.com/apis) 에서 Places API를 선택 후 key를 발급받아 lib/main.dart의 11번째 줄 YOUR_API_KEY에 입력
   
-  Naver Cloud Platform(https://www.ncloud.com/)에서 Maps의 Dynamic Map을 선택 후 Client ID를 발급받아 lib/main.dart의 17번째 줄 YOUR_CIENT_ID에 입력
+  Naver Cloud Platform(https://www.ncloud.com/) 에서 Maps의 Dynamic Map을 선택 후 Client ID를 발급받아 lib/main.dart의 17번째 줄 YOUR_CIENT_ID에 입력
 
 5. 애플리케이션 실행(안드로이드로 실행 권장)
 
