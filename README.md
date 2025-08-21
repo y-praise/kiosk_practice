@@ -1,6 +1,7 @@
 # Kiosk Practice 
 
 이 프로젝트는 Flutter를 사용하여 다양한 종류의 키오스크 UI를 연습하기 위해 제작되었습니다.
+
 공항, 음식점, 민원 발급 등 여러 시나리오를 시뮬레이션하는 것을 목표로 합니다. 
 
 ## 🌟 주요 기능
@@ -27,17 +28,23 @@
 
 ## 🚀 프로젝트 실행 방법
 1. 저장소 복제
+
   git clone https://github.com/your-username/kiosk_practice.git
 
 2. 프로젝트 폴더로 이동
+
   cd kiosk_practice
 
 3. Flutter 패키지 설치
+
   flutter pub get
 
 4. API key, Client ID 입력
-  Google Cloud API(https://cloud.google.com/apis)에서 Places API를 선택 후 key를 발급받아 lib/main.dart의 11번째 줄 YOUR_API_KEY에 입력
-  Naver Cloud Platform(https://www.ncloud.com/)에서 Maps의 Dynamic Map을 선택 후 Client ID를 발급받아 lib/main.dart의 17번째 줄 YOUR_CLIENT_ID에 입력
 
-6. 애플리케이션 실행(안드로이드로 실행 권장)
+  Google Cloud API(https://cloud.google.com/apis)에서 Places API를 선택 후 key를 발급받아 lib/main.dart의 11번째 줄 YOUR_API_KEY에 입력
+  
+  Naver Cloud Platform(https://www.ncloud.com/)에서 Maps의 Dynamic Map을 선택 후 Client ID를 발급받아 lib/main.dart의 17번째 줄 YOUR_CIENT_ID에 입력
+
+5. 애플리케이션 실행(안드로이드로 실행 권장)
+
   flutter run
